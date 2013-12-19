@@ -2,4 +2,9 @@
 
 {% block content %}
     <h1>Hello kikl</h1>
+
+    <form class="main shorten" method="post" action="">{% csrf_token %}
+        <input type="text" name="target"/>
+        <span class="input error"></span>
+    </form>
 {% endblock %}
