@@ -63,3 +63,12 @@ class AuthenticatedAjaxView(AjaxView):
                                                                **kwargs)
         else:
             return self.authentication_error()
+
+
+class AddLinkView(AjaxView):
+    pass
+
+
+class IncreaseDurationView(AuthenticatedAjaxView):
+    pass
+
