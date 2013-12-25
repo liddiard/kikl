@@ -3,6 +3,15 @@ from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 
 
+class Cursor(models.Model):
+    position = models.PositiveIntegerField(default=1)
+    KIND_CHOICES = (('a', 'Adjective'), ('n', 'Noun'))
+    kind = models.CharField(max_length=1, choices=KIND_CHOICES)
+
+    def __unicode__(self):
+        return "%s: %s" % (self.kind, self.position)
+
+
 class Word(models.Model):
 
     class Meta:

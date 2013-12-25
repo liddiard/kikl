@@ -1,5 +1,12 @@
 from django.contrib import admin
-from shortener.models import Adjective, Noun, Link
+from shortener.models import Cursor, Adjective, Noun, Link
+
+
+class CursorAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Cursor, CursorAdmin)
 
 
 class AdjectiveAdmin(admin.ModelAdmin):
