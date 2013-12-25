@@ -3,8 +3,9 @@ from django.shortcuts import render
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from shortener import models
+from shortener.models import Adjective, Noun, Link
 
+MAX_NUM_LINKS = 10
 
 # pages
 
@@ -47,6 +48,9 @@ class AjaxView(View):
     def authentication_error(self):
         return self.error("AuthenticationError", "User is not authenticated.")
 
+    def access_error(self, message):
+        return self.error("AccessError", message)
+
     def key_error(self, message):
         return self.error("KeyError", message)
 
@@ -68,7 +72,15 @@ class AuthenticatedAjaxView(AjaxView):
 
 
 class AddLinkView(AjaxView):
-    pass
+    
+    def post(self, request):
+        target = request.POST.get('target')
+        if target is None:
+            return self.key_error('Required key "target" not found in request')
+        if (Link.objects.filter(ip_added=request.META['REMOTE_ADDR']).count()
+            >= MAX_NUM_LINKS):
+            return self.access_error('User already has max number of active '
+                                     'links (%s).' % MAX_NUM_LINKS)
 
 
 class IncreaseDurationView(AuthenticatedAjaxView):
