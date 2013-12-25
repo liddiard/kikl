@@ -1,11 +1,13 @@
 import json
+from urlparse import urlparse
 from django.shortcuts import render
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from shortener.models import Adjective, Noun, Link
 
-MAX_NUM_LINKS = 10
+MAX_ANON_LINKS = 10
+MAX_AUTH_LINKS = 200
 
 # pages
 
@@ -74,13 +76,34 @@ class AuthenticatedAjaxView(AjaxView):
 class AddLinkView(AjaxView):
     
     def post(self, request):
+        user_ip = request.META['REMOTE_ADDR']
         target = request.POST.get('target')
         if target is None:
             return self.key_error('Required key "target" not found in request')
-        if (Link.objects.filter(ip_added=request.META['REMOTE_ADDR']).count()
-            >= MAX_NUM_LINKS):
+        parsed = urlparse(target)
+        if not parsed.scheme and parsed.netloc:
+            return self.validation_error("Target URL is missing protocol or "
+                                         "domain.")
+        if user.is_authenticated():
+            max_links = MAX_AUTH_LINKS
+            active_links = [x for x in Link.objects\
+                            .filter(user=request.user) 
+                            if x.is_active()]
+        else:
+            max_links = MAX_ANON_LINKS
+            active_links = [x for x in Link.objects\
+                            .filter(ip_added=user_ip) 
+                            if x.is_active()]
+        if (len(active_links) >= max_links):
             return self.access_error('User already has max number of active '
-                                     'links (%s).' % MAX_NUM_LINKS)
+                                     'links (%s).' % max_links)
+        if user.is_authenticated():
+            link = Link.objects.get_or_create(target=target, ip_added=user_ip, 
+                                              user_added=request.user)[0]
+        else:
+            link = Link.objects.get_or_create(target=target, 
+                                              ip_added=user_ip)[0]
+        return self.success(link=link.pk)
 
 
 class IncreaseDurationView(AuthenticatedAjaxView):
