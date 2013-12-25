@@ -5,14 +5,17 @@ from datetime import datetime, timedelta
 
 class Word(models.Model):
 
+    class Meta:
+        abstract = True
+    
     def random(self):
         count = self.count()
         random_index = randint(0, count - 1)
         return self.all()[random_index] 
 
-    class Meta:
-        abstract = True
-    
+    def __unicode__(self):
+        return self.word
+
 
 class Adjective(Word):
     word = models.CharField(max_length=16)
@@ -40,3 +43,6 @@ class Link(models.Model):
                     datetime.utcnow()
         else:
             return 0
+
+    def __unicode__(self):
+        return u"%s-%s \u00bb %s" % (self.adjective, self.noun, self.target)
