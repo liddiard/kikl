@@ -3,11 +3,22 @@ from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 
 
-class Adjective(models.Model):
+class Word(models.Model):
+
+    def random(self):
+        count = self.count()
+        random_index = randint(0, count - 1)
+        return self.all()[random_index] 
+
+    class Meta:
+        abstract = True
+    
+
+class Adjective(Word):
     word = models.CharField(max_length=16)
 
 
-class Noun(models.Model):
+class Noun(Word):
     word = models.CharField(max_length=16)
 
 
