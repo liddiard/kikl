@@ -4,10 +4,11 @@ from django.shortcuts import render
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from shortener.models import Adjective, Noun, Link
+from shortener.models import Cursor, Adjective, Noun, Link
 
 MAX_ANON_LINKS = 10
 MAX_AUTH_LINKS = 200
+
 
 # pages
 
@@ -74,6 +75,16 @@ class AuthenticatedAjaxView(AjaxView):
 
 
 class AddLinkView(AjaxView):
+
+    def get_word(self, word_model, cursor):
+        try:
+            word = word_model.objects.get(pk=cursor)
+        except word_model.DoesNotExist:
+            word = word_model.objects.get(pk=1)
+            cursor.position = 1
+        else:
+            cursor.position += 1
+        return word
     
     def post(self, request):
         user_ip = request.META['REMOTE_ADDR']
@@ -97,11 +108,17 @@ class AddLinkView(AjaxView):
         if (len(active_links) >= max_links):
             return self.access_error('User already has max number of active '
                                      'links (%s).' % max_links)
+        adjective_head = Cursor.objects.get(kind='a')
+        noun_head = Cursor.objects.get(kind='n')
+        adjective = self.get_word(word_model=Adjective, cursor=adjective_head)
+        noun = self.get_word(word_model=Noun, cursor=noun_head)
         if user.is_authenticated():
-            link = Link.objects.get_or_create(target=target, ip_added=user_ip, 
+            link = Link.objects.get_or_create(adjective=adjective, noun=noun,
+                                              target=target, ip_added=user_ip, 
                                               user_added=request.user)[0]
         else:
-            link = Link.objects.get_or_create(target=target, 
+            link = Link.objects.get_or_create(adjective=adjective, noun=noun,
+                                              target=target, 
                                               ip_added=user_ip)[0]
         return self.success(link=link.pk)
 
