@@ -84,6 +84,7 @@ class AddLinkView(AjaxView):
             cursor.position = 1
         else:
             cursor.position += 1
+        cursor.save()
         return word
     
     def post(self, request):
