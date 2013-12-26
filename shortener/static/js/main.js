@@ -1,6 +1,25 @@
-$(document).ready(function(){
-    ;
+$(document).ready(function() {
+    var add_link = $('.add-link');
+    add_link.on('input', function(){ addLinkInputChange(add_link) });
 });
+
+function addLinkInputChange(elem) {
+    var target = elem.val();
+    if (target.length > 0) {
+        console.log("detected a non-zero input change");
+        elem.prop('disabled', true);
+        ajaxAddLink(target);
+    } else elem.prop('disabled', false);
+}
+
+function ajaxAddLink(target) {
+    console.log(target);
+    ajaxPost(
+        {target: target},
+        '/api/link-add/',
+        function(response){ console.log(response); }
+    );
+}
 
 
 /* utility functions */
