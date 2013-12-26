@@ -1,6 +1,6 @@
+from datetime import datetime, timedelta
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import datetime, timedelta
 
 
 class Cursor(models.Model):
@@ -41,15 +41,14 @@ class Link(models.Model):
         # default max_length=200; may need to be increased
     ip_added = models.IPAddressField()
     user_added = models.ForeignKey(User, blank=True, null=True)
-    time_added = models.DateTimeField(default=datetime.utcnow())
+    time_added = models.DateTimeField(auto_now_add=True)
 
     def is_active(self):
-        return self.time_added + datetime.timedelta(hours=1) > datetime.utcnow()
+        return self.time_added + timedelta(hours=1) > datetime.utcnow()
 
     def secs_remaining(self):
         if self.is_active(): 
-            return (self.time_added + datetime.timedelta(hours=1)) - \
-                    datetime.utcnow()
+            return (self.time_added + timedelta(hours=1)) - datetime.utcnow()
         else:
             return 0
 
