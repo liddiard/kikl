@@ -1,5 +1,6 @@
 import json
 from urlparse import urlparse
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import DetailView
@@ -15,6 +16,10 @@ MAX_AUTH_LINKS = 200
 class FrontPageView(TemplateView):
     
     template_name = "front.html"
+
+
+def target_view(request):
+    pass
 
 
 class LinkView(DetailView):
@@ -78,7 +83,7 @@ class AddLinkView(AjaxView):
 
     def get_word(self, word_model, cursor):
         try:
-            word = word_model.objects.get(pk=cursor)
+            word = word_model.objects.get(pk=cursor.position)
         except word_model.DoesNotExist:
             word = word_model.objects.get(pk=1)
             cursor.position = 1
@@ -96,10 +101,10 @@ class AddLinkView(AjaxView):
         if not parsed.scheme and parsed.netloc:
             return self.validation_error("Target URL is missing protocol or "
                                          "domain.")
-        if user.is_authenticated():
+        if request.user.is_authenticated():
             max_links = MAX_AUTH_LINKS
             active_links = [x for x in Link.objects\
-                            .filter(user=request.user) 
+                            .filter(user_added=request.user) 
                             if x.is_active()]
         else:
             max_links = MAX_ANON_LINKS
@@ -113,7 +118,7 @@ class AddLinkView(AjaxView):
         noun_head = Cursor.objects.get(kind='n')
         adjective = self.get_word(word_model=Adjective, cursor=adjective_head)
         noun = self.get_word(word_model=Noun, cursor=noun_head)
-        if user.is_authenticated():
+        if request.user.is_authenticated():
             link = Link.objects.get_or_create(adjective=adjective, noun=noun,
                                               target=target, ip_added=user_ip, 
                                               user_added=request.user)[0]
