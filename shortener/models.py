@@ -42,12 +42,16 @@ class Link(models.Model):
     ip_added = models.IPAddressField()
     user_added = models.ForeignKey(User, blank=True, null=True)
     time_added = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
-    def is_active(self):
-        return self.time_added + timedelta(hours=1) > datetime.utcnow()
+    def deactivate_if_expired(self):
+        if self.time_added + timedelta(hours=1) < datetime.utcnow():
+            self.is_active = False
+            self.save()
 
     def secs_remaining(self):
-        if self.is_active(): 
+        self.deactivate_if_expired()
+        if self.is_active:
             return (self.time_added + timedelta(hours=1)) - datetime.utcnow()
         else:
             return 0
