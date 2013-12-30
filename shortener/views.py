@@ -103,15 +103,13 @@ class AddLinkView(AjaxView):
                                          'domain.')
         if request.user.is_authenticated():
             max_links = MAX_AUTH_LINKS
-            active_links = [x for x in Link.objects\
-                            .filter(user_added=request.user) 
-                            if x.is_active()]
+            active_links = Link.objects.filter(user_added=request.user)\
+                           .filter(is_active=True)
         else:
             max_links = MAX_ANON_LINKS
-            active_links = [x for x in Link.objects\
-                            .filter(ip_added=user_ip) 
-                            if x.is_active()]
-        if (len(active_links) >= max_links):
+            active_links = Link.objects.filter(ip_added=user_ip)\
+                           .filter(is_active=True)
+        if (active_links.count() >= max_links):
             return self.access_error('User already has max number of active '
                                      'links (%s).' % max_links)
         adjective_head = Cursor.objects.get(kind='a')
