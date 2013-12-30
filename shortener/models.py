@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 
@@ -55,6 +56,17 @@ class Link(models.Model):
             return (self.time_added + timedelta(hours=1)) - datetime.utcnow()
         else:
             return 0
+
+    def clean(self):
+        try:
+            link = Link.objects.filter(is_active=True)\
+                               .get(adjective=self.adjective, noun=self.noun)
+        except Link.DoesNotExist:
+            pass
+        else:
+            if link.pk != self.pk:
+                raise ValidationError('An active link with the chosen '
+                                      'adjective and noun already exists.')
 
     def __unicode__(self):
         return u"%s-%s \u00bb %s" % (self.adjective, self.noun, self.target)
