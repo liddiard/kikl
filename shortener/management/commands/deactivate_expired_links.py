@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from shorter.models import Link
+from shortener.models import Link
 
 class Command(BaseCommand):
 
