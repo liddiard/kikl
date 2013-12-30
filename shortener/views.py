@@ -1,6 +1,7 @@
 import json
 from urlparse import urlparse
 from django.http import HttpResponse
+from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import DetailView
@@ -8,7 +9,7 @@ from django.views.generic.list import ListView
 from shortener.models import Cursor, Adjective, Noun, Link
 
 MAX_ANON_LINKS = 10
-MAX_AUTH_LINKS = 200
+MAX_AUTH_LINKS = 20
 
 
 # pages
@@ -103,12 +104,11 @@ class AddLinkView(AjaxView):
                                          'domain.')
         if request.user.is_authenticated():
             max_links = MAX_AUTH_LINKS
-            active_links = Link.objects.filter(user_added=request.user)\
-                           .filter(is_active=True)
+            links = Link.objects.filter(user_added=request.user)
         else:
             max_links = MAX_ANON_LINKS
-            active_links = Link.objects.filter(ip_added=user_ip)\
-                           .filter(is_active=True)
+            links = Link.objects.filter(ip_added=user_ip)
+        active_links = links.filter(is_active=True)
         if (active_links.count() >= max_links):
             return self.access_error('User already has max number of active '
                                      'links (%s).' % max_links)
