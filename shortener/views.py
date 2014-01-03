@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from shortener.models import Cursor, Adjective, Noun, Link
+from shortener.models import Adjective, Noun, Link
 
 MAX_ANON_LINKS = 10
 MAX_AUTH_LINKS = 20
@@ -82,17 +82,6 @@ class AuthenticatedAjaxView(AjaxView):
 
 class AddLinkView(AjaxView):
 
-    def get_word(self, word_model, cursor):
-        try:
-            word = word_model.objects.get(pk=cursor.position)
-        except word_model.DoesNotExist:
-            word = word_model.objects.get(pk=1)
-            cursor.position = 1
-        else:
-            cursor.position += 1
-        cursor.save()
-        return word
-    
     def post(self, request):
         user_ip = request.META['REMOTE_ADDR']
         target = request.POST.get('target')
@@ -112,10 +101,20 @@ class AddLinkView(AjaxView):
         if (active_links.count() >= max_links):
             return self.access_error('User already has max number of active '
                                      'links (%s).' % max_links)
-        adjective_head = Cursor.objects.get(kind='a')
-        noun_head = Cursor.objects.get(kind='n')
-        adjective = self.get_word(word_model=Adjective, cursor=adjective_head)
-        noun = self.get_word(word_model=Noun, cursor=noun_head)
+        adjective = Adjective.objects.order_by('?')[0]
+        noun_query = '''
+            SELECT * FROM shortener_noun WHERE shortener_noun.id NOT IN 
+            (SELECT shortener_noun.id FROM shortener_noun LEFT OUTER JOIN 
+            shortener_link ON shortener_link.noun_id = shortener_noun.id 
+            WHERE shortener_link.is_active = 't' AND 
+            shortener_link.adjective_id = %s) ORDER BY RANDOM() LIMIT 1;
+        '''
+        noun_queryset = Noun.objects.raw(noun_query, [adjective.id])
+        try:
+            noun = noun_queryset[0]
+        except IndexError:
+            return self.error(error='CapacityError', message='No combination '
+                              'of link words is available at this time.')
         if request.user.is_authenticated():
             link = Link.objects.get_or_create(adjective=adjective, noun=noun,
                                               target=target, ip_added=user_ip, 
