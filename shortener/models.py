@@ -5,17 +5,21 @@ from django.contrib.auth.models import User
 
 
 class Word(models.Model):
+    objects = WordManager()
 
     class Meta:
         abstract = True
+    
+    def __unicode__(self):
+        return self.word
+
+
+class WordManager(models.Manager):
     
     def random(self):
         count = self.count()
         random_index = randint(0, count - 1)
         return self.all()[random_index] 
-
-    def __unicode__(self):
-        return self.word
 
 
 class Adjective(Word):
