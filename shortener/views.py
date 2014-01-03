@@ -10,6 +10,7 @@ from shortener.models import Adjective, Noun, Link
 
 MAX_ANON_LINKS = 10
 MAX_AUTH_LINKS = 20
+MAX_LINK_DURATION = 120
 
 
 # pages
@@ -89,7 +90,7 @@ class AddLinkView(AjaxView):
         user_ip = request.META['REMOTE_ADDR']
         target = request.POST.get('target')
         if target is None:
-            return self.key_error('Required key "target" not found in request')
+            return self.key_error('Required key "target" not found in request.')
         parsed = urlparse(target)
         if not parsed.scheme and parsed.netloc:
             return self.validation_error('Target URL is missing protocol or '
@@ -131,5 +132,19 @@ class AddLinkView(AjaxView):
 
 
 class IncreaseDurationView(AuthenticatedAjaxView):
-    pass
-
+    
+    def post(self, request):
+        link = request.POST.get('link')
+        if link is None:
+            return self.key_error('Required key "link" not found in request.')
+        try:
+            l = Link.objects.get(id=int(link))
+        except (ValueError, Link.DoesNotExist):
+            return self.does_not_exist('Link matching id %s does not exist.' 
+                                       % link)
+        if l.duration >= MAX_LINK_DURATION:
+            return self.access_error('Max link duration of %s minutes reached.' 
+                                     % MAX_LINK_DURATION)
+        l.duration += 10
+        l.save()
+        return self.success(link=l.pk, new_duration=l.duration)
