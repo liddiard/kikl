@@ -2,7 +2,7 @@ import json
 from urlparse import urlparse
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
-from django.shortcuts import render
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -19,8 +19,11 @@ class FrontPageView(TemplateView):
     template_name = "front.html"
 
 
-def target_view(request):
-    pass
+def target_view(request, adjective, noun):
+    a = get_object_or_404(Adjective, word=adjective)
+    n = get_object_or_404(Noun, word=noun)
+    link = get_object_or_404(Link, is_active=True, adjective=a, noun=n)
+    return redirect(link.target)
 
 
 class LinkView(DetailView):
