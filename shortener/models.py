@@ -1,7 +1,16 @@
+from random import randint
 from datetime import datetime, timedelta
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+
+
+class WordManager(models.Manager):
+    
+    def random(self):
+        count = self.count()
+        random_index = randint(0, count - 1)
+        return self.all()[random_index] 
 
 
 class Word(models.Model):
@@ -12,14 +21,6 @@ class Word(models.Model):
     
     def __unicode__(self):
         return self.word
-
-
-class WordManager(models.Manager):
-    
-    def random(self):
-        count = self.count()
-        random_index = randint(0, count - 1)
-        return self.all()[random_index] 
 
 
 class Adjective(Word):
@@ -36,6 +37,7 @@ class Link(models.Model):
     target = models.URLField() 
         # default max_length=200; may need to be increased
     ip_added = models.IPAddressField()
+    duration = models.PositiveIntegerField(default=60) # minutes
     user_added = models.ForeignKey(User, blank=True, null=True)
     time_added = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
@@ -48,7 +50,8 @@ class Link(models.Model):
     def secs_remaining(self):
         self.deactivate_if_expired()
         if self.is_active:
-            return (self.time_added + timedelta(hours=1)) - datetime.utcnow()
+            return (self.time_added + timedelta(minutes=self.duration))\
+                     - datetime.utcnow()
         else:
             return 0
 
