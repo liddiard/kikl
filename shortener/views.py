@@ -123,7 +123,8 @@ class AddLinkView(AjaxView):
             link = Link.objects.get_or_create(adjective=adjective, noun=noun,
                                               target=target, 
                                               ip_added=user_ip)[0]
-        return self.success(link=link.pk)
+        path = "%s-%s" % (adjective, noun)
+        return self.success(link=link.pk, path=path)
 
 
 class IncreaseDurationView(AuthenticatedAjaxView):
