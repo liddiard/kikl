@@ -28,11 +28,13 @@ def target_view(request, adjective, noun):
 
 
 class LinkView(DetailView):
-    pass
+    
+    model = Link
 
 
 class LinksView(ListView):
-    pass
+    
+    model = Link
 
 
 class AboutPageView(TemplateView):
