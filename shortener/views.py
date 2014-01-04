@@ -136,8 +136,9 @@ class AddLinkView(AjaxView):
         try:
             noun = noun_queryset[0]
         except IndexError:
-            return self.error(error='CapacityError', message='No combination '
-                              'of link words is available at this time.')
+            return self.error(error_type='CapacityError', message='No '
+                              'combination of link words is available at this '
+                              'time.')
         if request.user.is_authenticated():
             link = Link.objects.get_or_create(adjective=adjective, noun=noun,
                                               target=target, ip_added=user_ip, 
