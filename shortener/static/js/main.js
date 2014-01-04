@@ -42,7 +42,7 @@ function ajaxAddLink(target) {
                 error.text('You are limited to 10 active links at a time. Log in or create an account to double this limit.')
             }
             else if (response.error === "CapacityError") {
-                error.text('Uh oh! kikl.co is currently at capacity. We\'re really sorry about that; an administrator has been notified of the problem. Check back later and try again.')
+                error.text('Uh oh! kikl.co is currently at capacity. We\'re really sorry about that; an administrator has been notified of the problem. Check back later to try again.')
             }
             else {
                 error.text('An unexpected error occured. Sorry I couldn\'t be more specific. Maybe check your internet connection? If that\'s alright, the fact that you\'re seeing this means we screwed up!');
