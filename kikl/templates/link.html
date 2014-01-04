@@ -3,6 +3,6 @@
 {% block content %}
 
 <h1>{{ link.path }}</h1>
-<h2>{{ link.secs_remaining }}</h2>
+<h2>{{ link.secs_remaining|floatformat:"0" }}</h2>
 
 {% endblock %}
