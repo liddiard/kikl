@@ -23,8 +23,7 @@ function ajaxAddLink(target) {
     function addLinkResponse(response) {
         if (response.result === 0) {
             var url = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/'+response.path;
-            $('.link').val(url);
-            $('.link').select();
+            $('.link').text(url);
         }
         else { // there's an error
             var add_link = $('.add-link');
