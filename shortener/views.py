@@ -30,7 +30,7 @@ class FrontPageView(TemplateView):
 def target_view(request, adjective, noun):
     link = get_link(adjective, noun)
     link.deactivate_if_expired()
-    if link.is_active():
+    if link.is_active:
         return redirect(link.target)
     else:
         return Http404
