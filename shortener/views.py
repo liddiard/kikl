@@ -1,6 +1,6 @@
 import json
 from urlparse import urlparse
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic.base import View, TemplateView
@@ -12,6 +12,13 @@ MAX_ANON_LINKS = 10
 MAX_AUTH_LINKS = 20
 MAX_LINK_DURATION = 120
 
+# utility functions
+
+def get_link(adjective, noun):
+    a = get_object_or_404(Adjective, word=adjective)
+    n = get_object_or_404(Noun, word=noun)
+    link = get_object_or_404(Link, is_active=True, adjective=a, noun=n)
+    return link
 
 # pages
 
@@ -21,20 +28,31 @@ class FrontPageView(TemplateView):
 
 
 def target_view(request, adjective, noun):
-    a = get_object_or_404(Adjective, word=adjective)
-    n = get_object_or_404(Noun, word=noun)
-    link = get_object_or_404(Link, is_active=True, adjective=a, noun=n)
-    return redirect(link.target)
+    link = get_link(adjective, noun)
+    link.deactivate_if_expired()
+    if link.is_active():
+        return redirect(link.target)
+    else:
+        return Http404
 
 
-class LinkView(DetailView):
+class LinkView(TemplateView):
     
-    model = Link
+    template_name = "link.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(LinkView, self).get_context_data(**kwargs)
+        adjective = self.kwargs.get('adjective')
+        noun = self.kwargs.get('noun')
+        print adjective, noun
+        context['link'] = get_link(adjective, noun)
+        return context
 
 
 class LinksView(ListView):
     
     model = Link
+    template_name = "links.html"
 
 
 class AboutPageView(TemplateView):
@@ -129,8 +147,7 @@ class AddLinkView(AjaxView):
             link = Link.objects.get_or_create(adjective=adjective, noun=noun,
                                               target=target, 
                                               ip_added=user_ip)[0]
-        path = "%s-%s" % (adjective, noun)
-        return self.success(link=link.pk, path=path)
+        return self.success(link=link.pk, path=link.path)
 
 
 class IncreaseDurationView(AuthenticatedAjaxView):
