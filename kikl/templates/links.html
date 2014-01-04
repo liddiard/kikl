@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for link in links %}
+    <h3>{{ link.path }}</h3>
+    <h4>{{ link.secs_remaining }}</h4>
+{% endfor %}
+
+{% endblock %}
