@@ -51,8 +51,26 @@ function ajaxAddLink(target) {
     }
 }
 
+function format_time(secs) {
+    var minutes = Math.floor(secs/60);
+    var seconds = secs - minutes*60;
+    return {total: secs, minutes: minutes, seconds: seconds};
+}
+
+function timer(secs) {
+    setInterval(function(){
+        var ft = format_time(secs);
+        $('h2').text(ft.minutes+':'+pad(ft.seconds));
+        secs--;
+    }, 1000);
+}
+
 
 /* utility functions */
+
+function pad(n) {
+    return (n < 10) ? ("0" + n) : n;
+}
 
 function getCookie(name) {
     var cookieValue = null;

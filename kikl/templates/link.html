@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script>
+    window.link_time = {
+        total: {{ link.duration }} * 60,
+        remaining: {{ link.secs_remaining }}
+    }
+    timer(link_time.remaining);
+</script>
 
 <h1>{{ link.path }}</h1>
-<h2>{{ link.secs_remaining|floatformat:"0" }}</h2>
+<h2></h2>
 
 {% endblock %}
