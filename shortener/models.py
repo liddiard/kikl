@@ -46,15 +46,17 @@ class Link(models.Model):
         return "%s-%s" % (self.adjective, self.noun)
 
     def deactivate_if_expired(self):
-        if self.time_added + timedelta(hours=1) < datetime.utcnow():
+        if self.time_added + timedelta(hours=1) < datetime.now():
             self.is_active = False
             self.save()
 
     def secs_remaining(self):
         time_delta = (self.time_added + timedelta(minutes=self.duration))\
-                      - datetime.utcnow()
-        if time_delta > 0:
-            return time_delta
+                      - datetime.now()
+        delta_secs = time_delta.total_seconds()
+        print delta_secs
+        if delta_secs > 0:
+            return delta_secs
         else:
             return 0
 
