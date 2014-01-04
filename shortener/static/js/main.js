@@ -17,8 +17,33 @@ function ajaxAddLink(target) {
     ajaxPost(
         {target: target},
         '/api/link-add/',
-        function(response){ console.log(response); }
+        addLinkResponse
     );
+
+    function addLinkResponse(response) {
+        if (response.result === 0) {
+            var url = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/'+response.path;
+            $('.link').val(url);
+            $('.link').select();
+        }
+        else { // there's an error
+            var add_link = $('.add-link');
+            add_link.prop('disabled', false);
+            add_link.select();
+            if (response.error === "ValidationError") {
+                console.log(response);
+            }
+            else if (response.error === "AccessError") {
+                console.log(response);
+            }
+            else if (response.error === "CapacityError") {
+                console.log(response);
+            }
+            else {
+                console.log(response);
+            }
+        }
+    }
 }
 
 

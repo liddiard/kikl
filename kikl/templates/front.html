@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hello kikl</h1>
+    <h1>kikl.co</h1>
+    <h2>Tiny, memorable, short-life links.</h2>
 
     <form class="main" method="post" action="">{% csrf_token %}
-        <input class="add-link" type="text" name="target"/>
+        <input class="add-link" type="text" name="target" placeholder="paste a link and watch the magic"/>
         <span class="input error"></span>
     </form>
+
+    <input class="link" type="text" readonly/> 
 {% endblock %}
