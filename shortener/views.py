@@ -44,7 +44,6 @@ class LinkView(TemplateView):
         context = super(LinkView, self).get_context_data(**kwargs)
         adjective = self.kwargs.get('adjective')
         noun = self.kwargs.get('noun')
-        print adjective, noun
         context['link'] = get_link(adjective, noun)
         return context
 
@@ -147,7 +146,7 @@ class AddLinkView(AjaxView):
             link = Link.objects.get_or_create(adjective=adjective, noun=noun,
                                               target=target, 
                                               ip_added=user_ip)[0]
-        return self.success(link=link.pk, path=link.path)
+        return self.success(link=link.pk, path=link.path())
 
 
 class IncreaseDurationView(AuthenticatedAjaxView):
