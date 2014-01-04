@@ -21,25 +21,27 @@ function ajaxAddLink(target) {
     );
 
     function addLinkResponse(response) {
+        var add_link = $('.add-link');
         if (response.result === 0) {
             var url = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/'+response.path;
             $('.link').text(url);
+            // add_link.prop('disabled', false);
         }
         else { // there's an error
-            var add_link = $('.add-link');
+            var error = $('form.main .error');
             add_link.prop('disabled', false);
             add_link.select();
             if (response.error === "ValidationError") {
-                console.log(response);
+                error.text('That\'s not a valid url!')
             }
             else if (response.error === "AccessError") {
-                console.log(response);
+                error.text('You are limited to 10 active links at a time. Log in or create an account to double this limit.')
             }
             else if (response.error === "CapacityError") {
-                console.log(response);
+                error.text('Uh oh! kikl.co is currently at capacity. We\'re really sorry about that; an administrator has been notified of the problem. Check back later and try again.')
             }
             else {
-                console.log(response);
+                error.text('An unexpected error occured. Sorry I couldn\'t be more specific. Maybe check your internet connection? If that\'s alright, the fact that you\'re seeing this means we screwed up!');
             }
         }
     }
