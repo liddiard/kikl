@@ -54,9 +54,8 @@ class Link(models.Model):
         time_delta = (self.time_added + timedelta(minutes=self.duration))\
                       - datetime.now()
         delta_secs = time_delta.total_seconds()
-        print delta_secs
         if delta_secs > 0:
-            return delta_secs
+            return int(round(delta_secs))
         else:
             return 0
 
