@@ -92,7 +92,7 @@ class AddLinkView(AjaxView):
         if target is None:
             return self.key_error('Required key "target" not found in request.')
         parsed = urlparse(target)
-        if not parsed.scheme and parsed.netloc:
+        if not parsed.scheme and not parsed.netloc:
             return self.validation_error('Target URL is missing protocol or '
                                          'domain.')
         if request.user.is_authenticated():
