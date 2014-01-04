@@ -1,6 +1,10 @@
 $(document).ready(function() {
     var add_link = $('.add-link');
     add_link.on('input', function(){ addLinkInputChange(add_link) });
+    $('button.add-another').click(function(){
+        add_link.prop('disabled', false).val('').focus();
+        $(this).hide();
+    });
 });
 
 function addLinkInputChange(elem) {
