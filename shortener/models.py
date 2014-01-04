@@ -42,6 +42,9 @@ class Link(models.Model):
     time_added = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
+    def path(self):
+        return "%s-%s" % (self.adjective, self.noun)
+
     def deactivate_if_expired(self):
         if self.time_added + timedelta(hours=1) < datetime.utcnow():
             self.is_active = False
