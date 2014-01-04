@@ -29,7 +29,7 @@ function ajaxAddLink(target) {
         if (response.result === 0) {
             var url = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/'+response.path;
             $('.link').text(url);
-            // add_link.prop('disabled', false);
+            $('button.add-another').show();
         }
         else { // there's an error
             var error = $('form.main .error');
