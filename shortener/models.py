@@ -51,10 +51,10 @@ class Link(models.Model):
             self.save()
 
     def secs_remaining(self):
-        self.deactivate_if_expired()
-        if self.is_active:
-            return (self.time_added + timedelta(minutes=self.duration))\
-                     - datetime.utcnow()
+        time_delta = (self.time_added + timedelta(minutes=self.duration))\
+                      - datetime.utcnow()
+        if time_delta > 0:
+            return time_delta
         else:
             return 0
 
