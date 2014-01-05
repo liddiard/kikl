@@ -7,13 +7,13 @@
         var link = $('.link');
         var remaining = parseInt(link.attr('data-remaining'));
         var total = parseInt(link.attr('data-total')) * 60;
-        timer($('h2'), remaining, total);
+        timer(link, remaining, total);
     });
 </script>
 
 <section class="link" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}">
     <h1>{{ link.path }}</h1>
-    <h2></h2>
+    <h2 class="timer"></h2>
     <div style="width: 100%; height: 50px;" class="progress-container"><div style="background-color: red; height: 50px;"class="progress-bar"></div>
 </section>
 

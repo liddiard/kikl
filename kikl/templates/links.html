@@ -2,10 +2,22 @@
 
 {% block content %}
 
+<script>
+    $(document).ready(function(){
+        $('.link').each(function(){
+            var link = $(this);
+            var remaining = parseInt(link.attr('data-remaining'));
+            var total = parseInt(link.attr('data-total')) * 60;
+            timer(link, remaining, total);
+        });
+    });
+</script>
+
 {% for link in links %}
     <section class="link" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}" id="{{ link.path }}">
         <h3>{{ link.path }}</h3>
-        <h4></h4>
+        <h4 class="timer"></h4>
+        <div style="width: 100%; height: 50px;" class="progress-container"><div style="background-color: red; height: 50px;"class="progress-bar"></div>
     </section>
 {% endfor %}
 

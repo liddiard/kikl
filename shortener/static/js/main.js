@@ -57,14 +57,15 @@ function format_time(secs) {
     return {total: secs, minutes: minutes, seconds: seconds};
 }
 
-function timer(elem, remaining, total) {
-    // http://stackoverflow.com/a/5927432
+function timer(link, remaining, total) { // http://stackoverflow.com/a/5927432
+    var time = link.find('.timer');
+    var progress_bar = link.find('.progress-bar');
     var before = new Date();
     var interval = 1000;
     this.interval_id = setInterval(function(){
         if (remaining <= 0) {
             clearInterval(this.interval_id);
-            elem.text('0:00');
+            time.text('0:00');
             return;
         }
         var now = new Date();
@@ -74,8 +75,8 @@ function timer(elem, remaining, total) {
         else
             remaining--;
         var ft = format_time(remaining);
-        elem.text(ft.minutes+':'+pad(ft.seconds));
-        set_progress_bar($('.progress-bar'), remaining, total);
+        time.text(ft.minutes+':'+pad(ft.seconds));
+        set_progress_bar(progress_bar, remaining, total);
         before = new Date();
     }, interval);
 }
@@ -88,8 +89,7 @@ function set_progress_bar(elem, remaining, total) {
 
 /* utility functions */
 
-function pad(n) {
-    // http://stackoverflow.com/a/2998822
+function pad(n) { // http://stackoverflow.com/a/2998822
     return (n < 10) ? ("0" + n) : n;
 }
 
