@@ -1,11 +1,15 @@
 import json
 from urlparse import urlparse
+
 from django.http import HttpResponse, Http404
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+
 from shortener.models import Adjective, Noun, Link
 
 MAX_ANON_LINKS = 10
@@ -48,10 +52,19 @@ class LinkView(TemplateView):
         return context
 
 
-class LinksView(ListView):
+class LinksView(TemplateView):
     
-    model = Link
     template_name = "links.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LinksView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(LinksView, self).get_context_data(**kwargs)
+        context['links'] = Link.objects.filter(is_active=True, 
+                                               user_added=self.request.user)
+        return context
 
 
 class AboutPageView(TemplateView):
