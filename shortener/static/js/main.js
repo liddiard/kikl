@@ -62,8 +62,11 @@ function timer(elem, secs) {
     var before = new Date();
     var interval = 1000;
     this.interval_id = setInterval(function(){
-        if (secs <= 1) 
+        if (secs <= 0) {
             clearInterval(this.interval_id);
+            elem.text('0:00');
+            return;
+        }
         var now = new Date();
         var elapsed_time = now.getTime() - before.getTime();
         if (elapsed_time > interval) 
