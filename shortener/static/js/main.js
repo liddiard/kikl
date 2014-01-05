@@ -58,6 +58,7 @@ function format_time(secs) {
 }
 
 function timer(elem, secs) {
+    // http://stackoverflow.com/a/5927432
     var before = new Date();
     var interval = 1000;
     this.interval_id = setInterval(function(){
@@ -85,6 +86,7 @@ function set_progress_bar(elem, secs) {
 /* utility functions */
 
 function pad(n) {
+    // http://stackoverflow.com/a/2998822
     return (n < 10) ? ("0" + n) : n;
 }
 
