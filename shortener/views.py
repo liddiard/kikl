@@ -37,7 +37,7 @@ def target_view(request, adjective, noun):
     if link.is_active:
         return redirect(link.target)
     else:
-        return Http404
+        raise Http404
 
 
 class LinkView(TemplateView):
