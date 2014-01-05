@@ -1,3 +1,5 @@
+MAX_LINK_DURATION = 120;
+
 $(document).ready(function() {
     var add_link = $('.add-link');
     add_link.on('input', function(){ addLinkInputChange(add_link) });
@@ -17,7 +19,6 @@ function addLinkInputChange(elem) {
 }
 
 function ajaxAddLink(target) {
-    console.log(target);
     ajaxPost(
         {target: target},
         '/api/link-add/',
@@ -51,18 +52,43 @@ function ajaxAddLink(target) {
     }
 }
 
+function ajaxIncreaseDuration(link) {
+    link_id = link.attr('data-id');
+    ajaxPost(
+        {link: link_id},
+        '/api/link-increaseduration/',
+        increaseDurationResponse
+    );
+
+    function increaseDurationResponse(response) {
+        if (response.result === 0) {
+            var total = response.new_duration;
+            var secs_remaining = response.new_secs_remaining;
+            link.attr('data-total', total);
+            link.attr('data-remaining', secs_remaining);
+
+            if (total >= MAX_LINK_DURATION) {
+                link.find('button.add-time').hide();
+            }
+        }
+        else console.log(response);
+    }
+}
+
 function format_time(secs) {
     var minutes = Math.floor(secs/60);
     var seconds = secs - minutes*60;
     return {total: secs, minutes: minutes, seconds: seconds};
 }
 
-function timer(link, remaining, total) { // http://stackoverflow.com/a/5927432
+function timer(link) { // http://stackoverflow.com/a/5927432
     var time = link.find('.timer');
     var progress_bar = link.find('.progress-bar');
     var before = new Date();
     var interval = 1000;
     this.interval_id = setInterval(function(){
+        var remaining = parseInt(link.attr('data-remaining'));
+        var total = parseInt(link.attr('data-total')) * 60;
         if (remaining <= 0) {
             clearInterval(this.interval_id);
             time.text('0:00');
@@ -71,9 +97,9 @@ function timer(link, remaining, total) { // http://stackoverflow.com/a/5927432
         var now = new Date();
         var elapsed_time = now.getTime() - before.getTime();
         if (elapsed_time > interval) 
-            remaining -= Math.floor(elapsed_time/interval);
+            link.attr('data-remaining', remaining - Math.floor(elapsed_time/interval));
         else
-            remaining--;
+            link.attr('data-remaining', remaining - 1);
         var ft = format_time(remaining);
         time.text(ft.minutes+':'+pad(ft.seconds));
         set_progress_bar(progress_bar, remaining, total);

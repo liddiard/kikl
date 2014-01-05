@@ -6,18 +6,21 @@
     $(document).ready(function(){
         $('.link').each(function(){
             var link = $(this);
-            var remaining = parseInt(link.attr('data-remaining'));
-            var total = parseInt(link.attr('data-total')) * 60;
-            timer(link, remaining, total);
+            timer(link);
+        });
+        $('.link > button.add-time').click(function(){
+            var link = $(this).parent();
+            ajaxIncreaseDuration(link);
         });
     });
 </script>
 
 {% for link in links %}
-    <section class="link" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}" id="{{ link.path }}">
+    <section class="link" data-id="{{ link.id }}" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}" id="{{ link.path }}">
         <h3>{{ link.path }}</h3>
         <h4 class="timer"></h4>
-        <div style="width: 100%; height: 50px;" class="progress-container"><div style="background-color: red; height: 50px;"class="progress-bar"></div>
+        <div style="width: 100%; height: 50px;" class="progress-container"><div style="background-color: red; height: 50px;"class="progress-bar"></div></div>
+        {% if link.duration < MAX_LINK_DURATION %}<button class="add-time">+10 minutes</button>{% endif %}
     </section>
 {% endfor %}
 

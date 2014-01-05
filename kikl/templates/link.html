@@ -11,10 +11,10 @@
     });
 </script>
 
-<section class="link" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}">
+<section class="link" data-id="{{ link.id }}" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}">
     <h1>{{ link.path }}</h1>
     <h2 class="timer"></h2>
-    <div style="width: 100%; height: 50px;" class="progress-container"><div style="background-color: red; height: 50px;"class="progress-bar"></div>
+    <div style="width: 100%; height: 50px;" class="progress-container"><div style="background-color: red; height: 50px;"class="progress-bar"></div></div>
 </section>
 
 {% endblock %}

@@ -49,6 +49,7 @@ class LinkView(TemplateView):
         adjective = self.kwargs.get('adjective')
         noun = self.kwargs.get('noun')
         context['link'] = get_link(adjective, noun)
+        context['MAX_LINK_DURATION'] = MAX_LINK_DURATION
         return context
 
 
@@ -64,6 +65,7 @@ class LinksView(TemplateView):
         context = super(LinksView, self).get_context_data(**kwargs)
         context['links'] = Link.objects.filter(is_active=True, 
                                                user_added=self.request.user)
+        context['MAX_LINK_DURATION'] = MAX_LINK_DURATION
         return context
 
 
@@ -186,4 +188,5 @@ class IncreaseDurationView(AuthenticatedAjaxView):
                                      % MAX_LINK_DURATION)
         l.duration += 10
         l.save()
-        return self.success(link=l.pk, new_duration=l.duration)
+        return self.success(link=l.pk, new_duration=l.duration, 
+                            new_secs_remaining=l.secs_remaining())
