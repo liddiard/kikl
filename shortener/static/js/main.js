@@ -57,12 +57,12 @@ function format_time(secs) {
     return {total: secs, minutes: minutes, seconds: seconds};
 }
 
-function timer(elem, secs) {
+function timer(elem, remaining, total) {
     // http://stackoverflow.com/a/5927432
     var before = new Date();
     var interval = 1000;
     this.interval_id = setInterval(function(){
-        if (secs <= 0) {
+        if (remaining <= 0) {
             clearInterval(this.interval_id);
             elem.text('0:00');
             return;
@@ -70,18 +70,18 @@ function timer(elem, secs) {
         var now = new Date();
         var elapsed_time = now.getTime() - before.getTime();
         if (elapsed_time > interval) 
-            secs -= Math.floor(elapsed_time/interval);
+            remaining -= Math.floor(elapsed_time/interval);
         else
-            secs--;
-        var ft = format_time(secs);
+            remaining--;
+        var ft = format_time(remaining);
         elem.text(ft.minutes+':'+pad(ft.seconds));
-        set_progress_bar($('.progress-bar'), secs);
+        set_progress_bar($('.progress-bar'), remaining, total);
         before = new Date();
     }, interval);
 }
 
-function set_progress_bar(elem, secs) {
-    var percent = (secs/link_time.total) * 100;
+function set_progress_bar(elem, remaining, total) {
+    var percent = (remaining/total) * 100;
     elem.css('width', percent+'%');
 }
 

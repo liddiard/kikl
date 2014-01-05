@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <script>
-    window.link_time = {
-        total: {{ link.duration }} * 60,
-        remaining: {{ link.secs_remaining }}
-    }
     $(document).ready(function(){
-        timer($('h2'), link_time.remaining);
+        var link = $('.link');
+        var remaining = parseInt(link.attr('data-remaining'));
+        var total = parseInt(link.attr('data-total')) * 60;
+        timer($('h2'), remaining, total);
     });
 </script>
 
-<h1>{{ link.path }}</h1>
-<h2></h2>
-<div style="width: 100%; height: 50px;" class="progress-container"><div style="background-color: red; height: 50px;"class="progress-bar"></div>
+<section class="link" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}">
+    <h1>{{ link.path }}</h1>
+    <h2></h2>
+    <div style="width: 100%; height: 50px;" class="progress-container"><div style="background-color: red; height: 50px;"class="progress-bar"></div>
+</section>
 
 {% endblock %}
