@@ -71,8 +71,14 @@ function timer(elem, secs) {
             secs--;
         var ft = format_time(secs);
         elem.text(ft.minutes+':'+pad(ft.seconds));
+        set_progress_bar($('.progress-bar'), secs);
         before = new Date();
     }, interval);
+}
+
+function set_progress_bar(elem, secs) {
+    var percent = (secs/link_time.total) * 100;
+    elem.css('width', percent+'%');
 }
 
 
