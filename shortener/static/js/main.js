@@ -57,12 +57,22 @@ function format_time(secs) {
     return {total: secs, minutes: minutes, seconds: seconds};
 }
 
-function timer(secs) {
-    setInterval(function(){
+function timer(elem, secs) {
+    var before = new Date();
+    var interval = 1000;
+    this.interval_id = setInterval(function(){
+        if (secs <= 1) 
+            clearInterval(this.interval_id);
+        var now = new Date();
+        var elapsed_time = now.getTime() - before.getTime();
+        if (elapsed_time > interval) 
+            secs -= Math.floor(elapsed_time/interval);
+        else
+            secs--;
         var ft = format_time(secs);
-        $('h2').text(ft.minutes+':'+pad(ft.seconds));
-        secs--;
-    }, 1000);
+        elem.text(ft.minutes+':'+pad(ft.seconds));
+        before = new Date();
+    }, interval);
 }
 
 
