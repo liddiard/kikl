@@ -174,6 +174,13 @@ class IncreaseDurationView(AuthenticatedAjaxView):
         except (ValueError, Link.DoesNotExist):
             return self.does_not_exist('Link matching id %s does not exist.' 
                                        % link)
+        if not l.user_added == request.user:
+            return self.access_error('Users can only increase the time of '
+                                     'links they created.')
+        l.deactivate_if_expired()
+        if not l.is_active:
+            return self.does_not_exist('Link matching id %s has expired.'
+                                       % link)
         if l.duration >= MAX_LINK_DURATION:
             return self.access_error('Max link duration of %s minutes reached.' 
                                      % MAX_LINK_DURATION)
