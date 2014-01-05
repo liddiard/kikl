@@ -89,9 +89,11 @@ function timer(link) { // http://stackoverflow.com/a/5927432
     this.interval_id = setInterval(function(){
         var remaining = parseInt(link.attr('data-remaining'));
         var total = parseInt(link.attr('data-total')) * 60;
+        set_progress_bar(progress_bar, remaining, total);
         if (remaining <= 0) {
             clearInterval(this.interval_id);
             time.text('0:00');
+            link.find('button.add-time').hide();
             return;
         }
         var now = new Date();
@@ -102,7 +104,6 @@ function timer(link) { // http://stackoverflow.com/a/5927432
             link.attr('data-remaining', remaining - 1);
         var ft = format_time(remaining);
         time.text(ft.minutes+':'+pad(ft.seconds));
-        set_progress_bar(progress_bar, remaining, total);
         before = new Date();
     }, interval);
 }
