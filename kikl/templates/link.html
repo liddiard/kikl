@@ -10,13 +10,15 @@
             var link = $(this).parent();
             ajaxIncreaseDuration(link);
         });
+        var link_title = $('.link h1');
+        var path = link_title.text();
+        link_title.html(build_url(path));
     });
 </script>
 
 <section class="link" data-id="{{ link.id }}" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}">
-    <h1>{{ link.path }}</h1>
-    <h2 class="timer"></h2>
-    <div class="progress-container"><div class="progress-bar"></div></div>
+    <h1 class="medium link-url">{{ link.path }}</h1>
+    <div class="progress-container"><div class="progress-bar"><h2 class="timer"></h2></div></div>
     {% if user.is_authenticated and link.duration < MAX_LINK_DURATION %}<button class="add-time">+10 minutes</button>{% endif %}
 </section>
 

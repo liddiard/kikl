@@ -30,8 +30,8 @@ form.main input {
 button {
   background-color: red;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
   font-weight: bold;
+  border: 0;
   margin: 0;
   padding: 0.5em 1em;
   outline: none;
@@ -45,7 +45,8 @@ button {
     float: right;
     margin-top: 1.5em; }
   button.add-time {
-    float: right; }
+    float: right;
+    margin: 0.75em 0; }
 
 input {
   background-color: rgba(255, 255, 0, 0.3);
@@ -99,14 +100,17 @@ h2.tagline {
   font-weight: bold;
   line-height: 1.4; }
 
-.link {
+.link-url {
   color: yellow;
-  display: inline-block; }
-  .link .path {
+  display: inline-block;
+  font-weight: normal; }
+  .link-url .path {
     color: white; }
-  .link.large {
+  .link-url.large {
     font-size: 3em;
     margin-left: 15px; }
+  .link-url.medium {
+    font-size: 2em; }
 
 .progress-container {
   width: 100%;
@@ -114,6 +118,10 @@ h2.tagline {
   background-color: rgba(255, 255, 0, 0.3); }
 
 .progress-bar {
+  position: relative;
   width: 0;
   height: 100%;
   background-color: red; }
+  .progress-bar .timer {
+    float: right;
+    margin: 0.25em 0.5em 0 0; }
