@@ -1,0 +1,8 @@
+<section class="link" data-id="{{ link.id }}" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}">
+    <h1 class="medium link-url">{{ link.path }}</h1>
+    <div class="target">
+        &raquo; <a href="{{ link.target }}">{{ link.target }}</a>
+    </div>
+    <div class="{% block progress_size %}{% endblock %} progress-container"><div class="progress-bar"><h2 class="timer"></h2></div></div>
+    {% if user.is_authenticated %}<button class="{% if link.duration >= MAX_LINK_DURATION %}disabled {% endif %}add-time">+10 minutes</button>{% endif %}
+</section>

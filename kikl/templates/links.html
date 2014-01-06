@@ -7,21 +7,23 @@
         $('.link').each(function(){
             var link = $(this);
             timer(link);
+            var link_title = $(this).find('h1');
+            var path = link_title.text();
+            link_title.html(build_url(path, true));
         });
-        $('.link > button.add-time').click(function(){
+        $('.link > button.add-time').not('disabled').click(function(){
             var link = $(this).parent();
             ajaxIncreaseDuration(link);
         });
     });
 </script>
 
+<h1>Your active links</h1>
+
 {% for link in links %}
-    <section class="link" data-id="{{ link.id }}" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}" id="{{ link.path }}">
-        <h3>{{ link.path }}</h3>
-        <h4 class="timer"></h4>
-        <div class="progress-container"><div class="progress-bar"></div></div>
-        {% if link.duration < MAX_LINK_DURATION %}<button class="add-time">+10 minutes</button>{% endif %}
-    </section>
+
+    {% include 'linklet_small.html' %}
+
 {% endfor %}
 
 {% endblock %}

@@ -78,7 +78,8 @@ header {
     text-decoration: none; }
 
 section.link {
-  width: 100%; }
+  width: 100%;
+  margin-bottom: 2em; }
 
 h1.banner {
   display: inline;
@@ -130,8 +131,14 @@ h2.tagline {
 
 .progress-container {
   width: 100%;
-  height: 40px;
   background-color: rgba(255, 255, 0, 0.3); }
+  .progress-container.large {
+    height: 40px; }
+  .progress-container.small {
+    height: 20px; }
+    .progress-container.small .progress-bar .timer {
+      font-size: 1em;
+      margin: 0 0.35em 0 0; }
 
 .progress-bar {
   position: relative;
