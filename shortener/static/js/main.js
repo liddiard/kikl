@@ -28,8 +28,11 @@ function ajaxAddLink(target) {
     function addLinkResponse(response) {
         var add_link = $('.add-link');
         if (response.result === 0) {
-            var url = build_url(response.path);
-            $('.link-url').html(url);
+            var url = build_url(response.path, false);
+            var decorated_url = build_url(response.path, true);
+            $('.link-url').html(decorated_url);
+            var time_url = url+'/time';
+            $('.check-time-remaining').html('You can check the time remaining on this link anytime by going to <a href="'+time_url+'">'+time_url+'</a>.');
             $('button.add-another').show();
         }
         else { // there's an error
@@ -75,9 +78,11 @@ function ajaxIncreaseDuration(link) {
     }
 }
 
-function build_url(path) {
+function build_url(path, decorated) {
+    var decorated = decorated || false;
     var prefix = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/'
-    var path = '<span class="path">'+path+'</span>';
+    if (decorated)
+        var path = '<span class="path">'+path+'</span>';
     var url = prefix + path;
     return url;
 }
