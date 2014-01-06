@@ -32,7 +32,9 @@ button {
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
   font-weight: bold;
+  margin: 0;
   padding: 0.5em 1em;
+  outline: none;
   cursor: pointer; }
   button:hover {
     background-color: #ee0000; }
@@ -42,12 +44,14 @@ button {
     display: none;
     float: right;
     margin-top: 1.5em; }
+  button.add-time {
+    float: right; }
 
 input {
   background-color: rgba(255, 255, 0, 0.3);
   border: 0;
   padding: 0.5em;
-  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 0 0 1px 1px rgba(128, 64, 0, 0.3) inset;
   outline: none; }
   input:focus {
     background-color: rgba(255, 255, 0, 0.5); }
@@ -61,6 +65,9 @@ header {
   header a {
     color: inherit;
     text-decoration: none; }
+
+section.link {
+  width: 100%; }
 
 h1.banner {
   display: inline;
@@ -100,3 +107,13 @@ h2.tagline {
   .link.large {
     font-size: 3em;
     margin-left: 15px; }
+
+.progress-container {
+  width: 100%;
+  height: 40px;
+  background-color: rgba(255, 255, 0, 0.3); }
+
+.progress-bar {
+  width: 0;
+  height: 100%;
+  background-color: red; }

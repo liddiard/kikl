@@ -39,7 +39,7 @@ function ajaxAddLink(target) {
             add_link.prop('disabled', false);
             add_link.select();
             if (response.error === "ValidationError") {
-                error.text('That\'s not a valid url!')
+                error.text('Whoops, that\'s not a valid URL!')
             }
             else if (response.error === "AccessError") {
                 error.text('You are limited to 10 active links at a time. Log in or create an account to double this limit.')
