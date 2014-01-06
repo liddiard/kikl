@@ -1,4 +1,21 @@
+::-webkit-input-placeholder {
+  color: orange; }
+
+:-moz-placeholder {
+  /* Firefox 18- */
+  color: orange; }
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: orange; }
+
+:-ms-input-placeholder {
+  color: orange; }
+
 body {
+  margin: 0;
+  border: 0;
+  padding: 0;
   background-color: orange;
   color: white;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
@@ -24,16 +41,26 @@ button {
   button.add-another {
     display: none;
     float: right;
-    margin-top: 1.3em; }
+    margin-top: 1.5em; }
 
 input {
-  background-color: rgba(255, 255, 0, 0.5);
+  background-color: rgba(255, 255, 0, 0.3);
   border: 0;
   padding: 0.5em;
-  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3) inset; }
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.2) inset;
+  outline: none; }
+  input:focus {
+    background-color: rgba(255, 255, 0, 0.5); }
   input:disabled {
     box-shadow: none;
     background-color: rgba(255, 255, 0, 0.3); }
+
+header {
+  margin-top: 0.5em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+  header a {
+    color: inherit;
+    text-decoration: none; }
 
 h1.banner {
   display: inline;
@@ -55,6 +82,15 @@ h2.tagline {
   color: red; }
   .error.input {
     margin: 0.5em 0; }
+
+.lead {
+  font-weight: bold;
+  font-size: 3.2em;
+  margin: 0.25em 0; }
+
+.elevator-pitch {
+  font-weight: bold;
+  line-height: 1.4; }
 
 .link {
   color: yellow;

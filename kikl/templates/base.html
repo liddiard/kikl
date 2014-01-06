@@ -11,8 +11,10 @@
 <body>
     <div id="wrap">
         <header>
-            <h1 class="banner">kikl<span class="highlight">.</span>co</h1>
-            <h2 class="tagline">Tiny, memorable, short-life links.</h2>
+            <a href="{% url 'front' %}">
+                <h1 class="banner">kikl<span class="highlight">.</span>co</h1>
+            </a>
+                <h2 class="tagline">Tiny, short-life, memorable links.</h2>
         </header>
         {% block content %}{% endblock %}
     </div>

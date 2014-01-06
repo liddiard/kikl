@@ -2,8 +2,18 @@
 
 {% block content %}
 
+    <script>
+        $(document).ready(function(){
+            $('.main input.add-link').focus();
+        });
+    </script>
+
+    <div class="lead">Who could forget <span class="highlight">{{ sample_paths|random }}</span>?</div>
+    <p class="elevator-pitch">kikl.co is a different kind of link shortener. Instead of making links as short as possible, it tries to make links as memorable as possible. By default, each link only lasts an hour &ndash; perfect for transferring from one device to another or telling someone by word of mouth.</p>
+    <p class="elevator-pitch">Paste a link below to try it out:</p>
+
     <form class="main" method="post" action="">{% csrf_token %}
-        <input class="add-link" type="text" name="target" placeholder="paste a link and watch the magic"/>
+        <input class="add-link" type="text" name="target" placeholder="paste a link and watch the magic!"/>
         <div class="input error"></div>
     </form>
     <div class="large link"></div> 

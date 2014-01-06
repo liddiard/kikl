@@ -30,6 +30,12 @@ class FrontPageView(TemplateView):
     
     template_name = "front.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(FrontPageView, self).get_context_data(**kwargs)
+        context['sample_paths'] = ['sexy-jellyfish', 'fabulous-anteater', 
+                                   'awkward-puffin']
+        return context
+
 
 def target_view(request, adjective, noun):
     link = get_link(adjective, noun)
