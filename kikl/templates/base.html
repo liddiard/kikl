@@ -4,10 +4,17 @@
     <meta charset="utf-8">
     <title>kikl.co</title>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css">
+    <link href='http://fonts.googleapis.com/css?family=Nunito:700' rel='stylesheet' type='text/css'>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="{{ STATIC_URL }}js/main.js"></script>
 </head>
 <body>
-    {% block content %}{% endblock %}
+    <div id="wrap">
+        <header>
+            <h1 class="banner">kikl<span class="highlight">.</span>co</h1>
+            <h2 class="tagline">Tiny, memorable, short-life links.</h2>
+        </header>
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html>

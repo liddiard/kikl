@@ -1,0 +1,101 @@
+$helvetica: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+@mixin box_sizing() {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: orange;
+    color: white;
+    font-family: $helvetica;
+}
+
+form {
+    &.main {
+        input {
+            width: 100%;
+            font-size: 2em;
+            @include box_sizing;
+        }
+    }
+}
+
+button {
+    $background_color: red;
+    background-color: $background_color;
+    color: white;
+    border: 1px solid rgba(255,255,255, 0.3);
+    font-weight: bold;
+    padding: 0.5em 1em;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $background_color - #111;
+    }
+
+    &:active {
+        background-color: $background_color - #222;
+    }
+
+    &.add-another {
+        display: none;
+        float: right;
+        margin-top: 1.3em;
+    }
+}
+
+input {
+    background-color: rgba(255,255,0, 0.5);
+    border: 0;
+    padding: 0.5em;
+    box-shadow: 0 0 1px 1px rgba(0,0,0, 0.3) inset;
+
+    &:disabled {
+        box-shadow: none;
+        background-color: rgba(255,255,0, 0.3);
+    }
+}
+
+h1.banner {
+    display: inline;
+    font-family: 'Nunito', sans-serif;
+}
+
+h2.tagline {
+    display: inline;
+    font-weight: normal;
+    padding-left: 0.4em;
+}
+
+#wrap {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.highlight {
+    color: yellow;
+}
+
+.error {
+    color: red;
+
+    &.input {
+        margin: 0.5em 0;
+    }
+}
+
+.link {
+    color: yellow;
+    display: inline-block;
+
+    .path {
+        color: white;
+    }
+
+    &.large {
+        font-size: 3em;
+        margin-left: 15px;
+    }
+}

@@ -1,0 +1,66 @@
+body {
+  background-color: orange;
+  color: white;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+form.main input {
+  width: 100%;
+  font-size: 2em;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+button {
+  background-color: red;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+  padding: 0.5em 1em;
+  cursor: pointer; }
+  button:hover {
+    background-color: #ee0000; }
+  button:active {
+    background-color: #dd0000; }
+  button.add-another {
+    display: none;
+    float: right;
+    margin-top: 1.3em; }
+
+input {
+  background-color: rgba(255, 255, 0, 0.5);
+  border: 0;
+  padding: 0.5em;
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3) inset; }
+  input:disabled {
+    box-shadow: none;
+    background-color: rgba(255, 255, 0, 0.3); }
+
+h1.banner {
+  display: inline;
+  font-family: 'Nunito', sans-serif; }
+
+h2.tagline {
+  display: inline;
+  font-weight: normal;
+  padding-left: 0.4em; }
+
+#wrap {
+  max-width: 960px;
+  margin: 0 auto; }
+
+.highlight {
+  color: yellow; }
+
+.error {
+  color: red; }
+  .error.input {
+    margin: 0.5em 0; }
+
+.link {
+  color: yellow;
+  display: inline-block; }
+  .link .path {
+    color: white; }
+  .link.large {
+    font-size: 3em;
+    margin-left: 15px; }

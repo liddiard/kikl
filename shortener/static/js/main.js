@@ -28,8 +28,10 @@ function ajaxAddLink(target) {
     function addLinkResponse(response) {
         var add_link = $('.add-link');
         if (response.result === 0) {
-            var url = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/'+response.path;
-            $('.link').text(url);
+            var prefix = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/'
+            var path = '<span class="path">'+response.path+'</span>';
+            var url = prefix + path;
+            $('.link').html(url);
             $('button.add-another').show();
         }
         else { // there's an error
@@ -43,7 +45,7 @@ function ajaxAddLink(target) {
                 error.text('You are limited to 10 active links at a time. Log in or create an account to double this limit.')
             }
             else if (response.error === "CapacityError") {
-                error.text('Uh oh! kikl.co is currently at capacity. We\'re really sorry about that; an administrator has been notified of the problem. Check back later to try again.')
+                error.text('Uh oh! kikl.co is currently at capacity. An administrator has been notified; check back in a bit to try again. Sorry for the inconvenience!')
             }
             else {
                 error.text('An unexpected error occured. Sorry I couldn\'t be more specific. Maybe check your internet connection? If that\'s alright, the fact that you\'re seeing this means we screwed up!');
