@@ -71,7 +71,7 @@ function ajaxIncreaseDuration(link) {
             link.attr('data-remaining', secs_remaining);
 
             if (total >= MAX_LINK_DURATION) {
-                link.find('button.add-time').hide();
+                link.find('button.add-time').unbind('click').addClass('disabled');
             }
         }
         else console.log(response);
