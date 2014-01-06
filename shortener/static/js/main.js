@@ -122,6 +122,8 @@ function timer(link) { // http://stackoverflow.com/a/5927432
 
 function set_progress_bar(elem, remaining, total) {
     var percent = (remaining/total) * 100;
+    if (percent < 5)
+        elem.find('.timer').addClass('short');
     elem.css('width', percent+'%');
 }
 
