@@ -40,6 +40,13 @@ button {
     background-color: #ee0000; }
   button:active {
     background-color: #dd0000; }
+  button.disabled {
+    opacity: 0.5;
+    cursor: default; }
+    button.disabled:hover {
+      background-color: red; }
+    button.disabled:active {
+      background-color: red; }
   button.add-another {
     display: none;
     float: right;

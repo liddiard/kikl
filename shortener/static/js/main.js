@@ -100,7 +100,7 @@ function timer(link) { // http://stackoverflow.com/a/5927432
         if (remaining <= 0) {
             clearInterval(this.interval_id);
             time.text('0:00');
-            link.find('button.add-time').hide();
+            link.find('button.add-time').unbind('click').addClass('disabled');
             return;
         }
         var now = new Date();

@@ -58,6 +58,19 @@ button {
         background-color: $background_color - #222;
     }
 
+    &.disabled {
+        opacity: 0.5;
+        cursor: default;
+
+        &:hover {
+            background-color: $background_color;
+        }
+
+        &:active {
+            background-color: $background_color;
+        }
+    }
+
     &.add-another {
         display: none;
         float: right;

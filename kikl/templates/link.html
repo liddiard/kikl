@@ -6,7 +6,7 @@
     $(document).ready(function(){
         var link = $('.link');
         timer(link);
-        $('.link > button.add-time').click(function(){
+        $('.link > button.add-time').not('.disabled').click(function(){
             var link = $(this).parent();
             ajaxIncreaseDuration(link);
         });
@@ -19,7 +19,7 @@
 <section class="link" data-id="{{ link.id }}" data-total="{{ link.duration }}" data-remaining="{{ link.secs_remaining }}">
     <h1 class="medium link-url">{{ link.path }}</h1>
     <div class="progress-container"><div class="progress-bar"><h2 class="timer"></h2></div></div>
-    {% if user.is_authenticated and link.duration < MAX_LINK_DURATION %}<button class="add-time">+10 minutes</button>{% endif %}
+    {% if user.is_authenticated %}<button class="{% if link.duration <= MAX_LINK_DURATION %}disabled {% endif %}add-time">+10 minutes</button>{% endif %}
 </section>
 
 {% endblock %}
