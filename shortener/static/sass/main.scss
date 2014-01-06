@@ -29,6 +29,10 @@ body {
     font-family: $helvetica;
 }
 
+a {
+    color: white;
+}
+
 form {
     &.main {
         input {
@@ -172,7 +176,14 @@ h2.tagline {
 
     &.medium {
         font-size: 2em;
+        margin-bottom: 0;
     }
+}
+
+.target {
+    display: block;
+    word-wrap: break-word;
+    margin: 0.5em 0 1.5em 0;
 }
 
 .progress-container {
