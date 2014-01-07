@@ -16,6 +16,7 @@
 <dd>{{ form.username }}</dd>
 <dt><label for="id_password">Password:</label>{% if form.password.errors %} <span class="error">{{ form.password.errors|join:", " }}</span>{% endif %}</dt>
 <dd>{{ form.password }}</dd>
+<a class="forgot-password" href="{% url 'auth_password_reset' %}">Forgot password</a>
 <dt><input type="submit" value="Log in" /></dt>
 </dl>
 </form>

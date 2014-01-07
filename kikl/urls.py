@@ -25,5 +25,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     # accounts
-    (r'^accounts/', include('registration.urls')),
+    (r'^accounts/', include('kikl.urls_accounts')),
 )
