@@ -1,12 +1,5 @@
 from django.contrib import admin
-from shortener.models import CustomUser, Adjective, Noun, Link
-
-
-class CustomUserAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(CustomUser, CustomUserAdmin)
+from shortener.models import Adjective, Noun, Link
 
 
 class AdjectiveAdmin(admin.ModelAdmin):
