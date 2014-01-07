@@ -106,7 +106,8 @@ h2.tagline {
 
 #wrap {
   max-width: 960px;
-  margin: 0 auto; }
+  margin: 0 auto;
+  padding: 0 0.5em; }
 
 .highlight {
   color: yellow; }

@@ -17,8 +17,8 @@
     <div>
         <label for="id_email">Email address</label>
         {{ form.email }}
-        {% if form.email.errors %}
-        <p class="error">{{ form.email.errors.as_text }}</p>
+        {% if form.username.errors %}
+        <p class="error">{{ form.username.errors.as_text }}</p>
         {% endif %}
     </div>
 
