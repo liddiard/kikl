@@ -22,6 +22,9 @@ body {
 
 a {
   color: white; }
+  a.banner {
+    color: inherit;
+    text-decoration: none; }
 
 form.main input {
   width: 100%;
@@ -36,7 +39,7 @@ button {
   font-weight: bold;
   border: 0;
   margin: 0;
-  padding: 0.5em 1em;
+  padding: 0.5em 0.75em;
   outline: none;
   cursor: pointer; }
   button:hover {
@@ -73,9 +76,12 @@ input {
 header {
   margin: 0.5em 0 1em 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
-  header a {
-    color: inherit;
-    text-decoration: none; }
+  header .account-actions {
+    display: inline-block;
+    float: right;
+    margin-top: 5px; }
+    header .account-actions.auth {
+      margin-top: 15px; }
 
 section.link {
   width: 100%;

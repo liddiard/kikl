@@ -31,6 +31,11 @@ body {
 
 a {
     color: white;
+
+    &.banner {
+        color: inherit;
+        text-decoration: none;
+    }
 }
 
 form {
@@ -50,7 +55,7 @@ button {
     font-weight: bold;
     border: 0;
     margin: 0;
-    padding: 0.5em 1em;
+    padding: 0.5em 0.75em;
     outline: none;
     cursor: pointer;
 
@@ -108,9 +113,14 @@ header {
     margin: 0.5em 0 1em 0;
     border-bottom: 1px solid rgba(255,255,255, 0.5);
 
-    a {
-        color: inherit;
-        text-decoration: none;
+    .account-actions {
+        display: inline-block;
+        float: right;
+        margin-top: 5px;
+
+        &.auth {
+            margin-top: 15px;
+        }
     }
 }
 
@@ -133,7 +143,6 @@ footer {
 h1.banner {
     display: inline;
     font-family: 'Nunito', sans-serif;
-
 }
 
 h2.tagline {

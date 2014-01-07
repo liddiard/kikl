@@ -11,10 +11,19 @@
 <body>
     <div id="wrap">
         <header>
-            <a href="{% url 'front' %}">
+            <a class="banner" href="{% url 'front' %}">
                 <h1 class="banner">kikl<span class="highlight">.</span>co</h1>
             </a>
                 <h2 class="tagline">Tiny, short-lived, memorable links.</h2>
+            <div class="account-actions{% if user.is_authenticated %} auth{% endif %}">
+                {% if user.is_authenticated %}
+                    <span class="username">{{ user }}</span> | 
+                    <a href="{% url 'auth_logout' %}">Log out</a>
+                {% else %}
+                    <a href="{% url 'auth_login' %}">Log in</a> or 
+                    <a href="{% url 'registration_register' %}"><button>Create an account</button></a>
+                {% endif %}
+            </div>
         </header>
         {% block content %}{% endblock %}
         <footer>

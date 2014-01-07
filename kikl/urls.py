@@ -23,4 +23,7 @@ urlpatterns = patterns('',
 
     # admin
     url(r'^admin/', include(admin.site.urls)),
+
+    # accounts
+    (r'^accounts/', include('registration.urls')),
 )
