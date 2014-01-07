@@ -79,3 +79,5 @@ USE_TZ = False
 TEMPLATE_DIRS = (
     BASE_DIR+'/templates',
 )
+
+AUTH_USER_MODEL = 'shortener.CustomUser'
