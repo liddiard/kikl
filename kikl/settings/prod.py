@@ -3,10 +3,6 @@ import dj_database_url
 
 DEBUG = False
 
-AWS_STORAGE_BUCKET_NAME = 'kikl'
-S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-
-STATIC_URL = S3_URL
 
 DATABASES = {
     'default': dj_database_url.config()
