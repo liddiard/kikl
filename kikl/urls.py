@@ -14,16 +14,16 @@ urlpatterns = patterns('',
     url(r'^api/link-increaseduration/$', views.IncreaseDurationView.as_view(), 
         name='link_increaseduration'),
 
+    # admin
+    url(r'^admin/', include(admin.site.urls)),
+
+    # accounts
+    (r'^accounts/', include('kikl.urls_accounts')),
+
     # main
     url(r'^links/$', views.LinksView.as_view(), name='links'),
     url(r'^(?P<adjective>\S+)-(?P<noun>\S+)/time/$', views.LinkView.as_view(), 
         name='link'),
     url(r'^(?P<adjective>\S+)-(?P<noun>\S+)/$', views.target_view, 
         name='target'),
-
-    # admin
-    url(r'^admin/', include(admin.site.urls)),
-
-    # accounts
-    (r'^accounts/', include('kikl.urls_accounts')),
 )
