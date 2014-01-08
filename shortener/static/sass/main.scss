@@ -204,11 +204,11 @@ h2.tagline {
             content: "";
             position: absolute;
             width: 0; height: 0;
-            border-width: 10px;
+            border-width: 8px;
             border-style: solid;
             border-color: transparent transparent white transparent;
-            top: -20px;
-            left: 123px;
+            top: -16px;
+            left: 120px;
         }
 
         li {
@@ -226,16 +226,12 @@ h2.tagline {
             &:hover {
                 background-color: yellow;
             }
-
-            &:active {
-                background-color: orange;
-            }
         }
 
         .email {
             cursor: default;
             color: gray;
-            padding: 0 1em 0.25em 1em;
+            padding: 0 1em 0.5em 1em;
         }
     }
 }

@@ -23,6 +23,7 @@
                         <span class="username">{{ user }}<img src="{{ STATIC_URL }}img/drop.png"/></span>
                         <ul class="menu">
                             <li class="email">{{ user.email }}</li>
+                            <li><a href="{% url 'links' %}">Your active links</a></li>
                             <li><a href="{% url 'auth_password_change' %}">Change password</a></li>
                             <li class="delete-account"><a href="{% url 'account_delete' %}">Delete account</a></li>
                         </ul>
