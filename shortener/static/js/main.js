@@ -7,6 +7,7 @@ $(document).ready(function() {
         add_link.prop('disabled', false).val('').focus();
         $(this).hide();
     });
+    $('input[type=text]').first().focus();
 });
 
 function addLinkInputChange(elem) {
