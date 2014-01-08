@@ -156,6 +156,8 @@ h2.tagline {
       padding: 0.25em 1em; }
       .user .menu a:hover {
         background-color: yellow; }
+      .user .menu a:active {
+        background-color: orange; }
     .user .menu .email {
       cursor: default;
       color: gray;

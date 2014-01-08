@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib.auth import views as auth_views
 
+from shortener import views
+
 urlpatterns = patterns('',
 
       #override the default urls
@@ -22,6 +24,10 @@ urlpatterns = patterns('',
       url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
                     auth_views.password_reset_confirm,
                     name='password_reset_confirm'),
+      url(r'^delete/$', views.AccountDeleteView.as_view(),
+                    name='account_delete'),
+      url(r'^delete/complete/$', views.AccountDeleteCompleteView.as_view(),
+                    name='account_delete_complete'),
 
       #and now add the registration urls
       url(r'', include('registration.backends.default.urls')),

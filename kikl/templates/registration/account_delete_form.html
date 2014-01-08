@@ -11,19 +11,23 @@
 <h1>Delete account</h1>
 
 <p>Are you sure you want to delete your kikl.co account? <strong>WARNING: this is a destructive action and cannot be undone.</strong></p>
-<p>If you're sure you wish to proceed, re-enter this account's email address and password to confirm deletion.</p>
+<p>If you're sure you wish to proceed, re-enter this account's username and password to confirm deletion.</p>
 
 <form class="account delete" method="post" action="">{% csrf_token %}
-    <div>
-        <label for="id_username">Email</label>
-        {{ form.username }}
-        <p class="error">{{ form.username.errors }}</p>
-    </div>
-    <div>
-        <label for="id_password">Password</label>
-        {{ form.password }}
-        <p class="error">{{ form.password.errors }}</p>
-    </div>
+    <dl>
+        <dt>
+            <label for="id_username">Username:</label>
+            <span class="error">{{ form.username.errors.as_text }}</span>
+        </dt>
+        <dd>{{ form.username }}</dd>
+    </dl>
+    <dl>
+        <dt>
+            <label for="id_password">Password:</label>
+            <span class="error">{{ form.password.errors.as_text }}</span>
+        </dt>
+        <dd>{{ form.password }}</dd>
+    </dl>
     <button type="submit" class="medium destructive-action">I understand this action is irreversible. Delete my account.</button>
 </form>
 

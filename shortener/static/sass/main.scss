@@ -219,6 +219,10 @@ h2.tagline {
             &:hover {
                 background-color: yellow;
             }
+
+            &:active {
+                background-color: orange;
+            }
         }
 
         .email {
