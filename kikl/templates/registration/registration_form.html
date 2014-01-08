@@ -5,40 +5,56 @@
 {% block content %}
 
 {% if form.errors %}
-<p class="error">Please correct the errors below.{{ form.non_field_errors }}</p>
+<p class="error">Please correct the errors below:{{ form.non_field_errors }}</p>
 {% endif %}
 
 <h1>Create an account</h1>
 
-<p>Welcome to kikl.co! Just enter an email and password to get your account.</p>
+<p>Welcome to kikl.co! Fill out the following to create your account.</p>
 
 <form method="post" action="{% url 'registration_register' %}" class="account create">{% csrf_token %}
 
-    <div>
-        <label for="id_email">Email address</label>
-        {{ form.email }}
-        {% if form.email.errors %}
-        <p class="error">{{ form.email.errors.as_text }}</p>
-        {% endif %}
-    </div>
+    <dl>
+        <dt>
+            <label for="id_email">Username:</label>
+            {% if form.username.errors %}
+            <span class="error">{{ form.username.errors.as_text }}</span>
+            {% endif %}
+        </dt>
+        <dd>{{ form.username }}</dd>
+    </dl>
 
-    <div>
-        <label for="id_password1">Password</label>
-        {{ form.password1 }}
-        {% if form.password1.errors %}
-        <p class="error">{{ form.password1.errors.as_text }}</p>
-        {% endif %}
-    </div>
+    <dl>
+        <dt>
+            <label for="id_email">Email address:</label>
+            {% if form.email.errors %}
+            <span class="error">{{ form.email.errors.as_text }}</span>
+            {% endif %}
+        </dt>
+        <dd>{{ form.email }}</dd>
+    </dl>
 
-    <div>
-        <label for="id_password2">Password (again)</label>
-        {{ form.password2 }}
-        {% if form.password2.errors %}
-        <p class="error">{{ form.password2.errors.as_text }}</p>
-        {% endif %}
-    </div>
+    <dl>
+        <dt>
+            <label for="id_password1">Password:</label>
+            {% if form.password1.errors %}
+            <span class="error">{{ form.password1.errors.as_text }}</span>
+            {% endif %}
+        </dt>
+        <dd>{{ form.password1 }}</dd>
+    </dl>
 
-    <button type="submit" class="medium">Create account</button>
+    <dl>
+        <dt>
+            <label for="id_password2">Password (again):</label>
+            {% if form.password2.errors %}
+            <span class="error">{{ form.password2.errors.as_text }}</span>
+            {% endif %}
+        </dt>
+        <dd>{{ form.password2 }}</dd>
+    </dl>
+
+    <button type="submit">Create account</button>
 </form>
   
 {% endblock %}

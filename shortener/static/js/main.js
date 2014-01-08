@@ -7,7 +7,19 @@ $(document).ready(function() {
         add_link.prop('disabled', false).val('').focus();
         $(this).hide();
     });
-    $('input[type=text]').first().focus();
+    $('input:visible').first().focus();
+
+    /* menu */
+    $('.user .username').click(function(event){
+        event.stopPropagation();
+        $('.user .menu').toggle();
+    });
+    $('.menu').click(function(event){
+        event.stopPropagation();
+    });
+    $('body').click(function(){
+        $('.user .menu').hide();
+    });
 });
 
 function addLinkInputChange(elem) {

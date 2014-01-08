@@ -79,3 +79,5 @@ USE_TZ = False
 TEMPLATE_DIRS = (
     BASE_DIR+'/templates',
 )
+
+ACCOUNT_ACTIVATION_DAYS = 7

@@ -25,6 +25,14 @@ a {
   a.banner {
     color: inherit;
     text-decoration: none; }
+  a.forgot-password {
+    font-size: 0.7em; }
+
+dd {
+  margin-left: 0; }
+
+dt {
+  margin: 0.75em 0 0.25em 0; }
 
 form.main input {
   width: 100%;
@@ -66,7 +74,8 @@ input {
   border: 0;
   padding: 0.5em;
   box-shadow: 0 0 1px 1px rgba(128, 64, 0, 0.3) inset;
-  outline: none; }
+  outline: none;
+  margin: 0; }
   input:focus {
     background-color: rgba(255, 255, 0, 0.5); }
   input:disabled {
@@ -76,6 +85,8 @@ input {
 header {
   margin: 0.5em 0 1em 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+  header button {
+    margin-left: 0.25em; }
   header .account-actions {
     display: inline-block;
     float: right;
@@ -108,12 +119,55 @@ h2.tagline {
   max-width: 960px;
   margin: 0 auto; }
 
+.user {
+  position: relative; }
+  .user .username {
+    cursor: pointer; }
+  .user .menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    list-style-type: none;
+    background-color: white;
+    color: black;
+    font-size: 0.8em;
+    margin: 0;
+    margin-top: 8px;
+    padding: 0.75em 0 0.5em 0;
+    border: 1px solid rgba(0, 0, 0, 0.3); }
+    .user .menu:before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent transparent white transparent;
+      top: -20px;
+      left: 123px; }
+    .user .menu li {
+      margin: 0;
+      padding: 0; }
+    .user .menu a {
+      color: black;
+      font-weight: bold;
+      text-decoration: none;
+      display: block;
+      padding: 0.25em 1em; }
+      .user .menu a:hover {
+        background-color: yellow; }
+    .user .menu .email {
+      cursor: default;
+      color: gray;
+      padding: 0 1em 0.25em 1em; }
+
 .highlight {
   color: yellow; }
 
-.error {
-  color: red; }
-  .error.input {
+.error, .errorlist {
+  color: red;
+  font-weight: bold; }
+  .error.input, .errorlist.input {
     margin: 0.5em 0; }
 
 .lead {
@@ -136,6 +190,9 @@ h2.tagline {
   .link-url.medium {
     font-size: 2em;
     margin-bottom: 0; }
+
+.username {
+  font-weight: bold; }
 
 .target {
   display: block;
