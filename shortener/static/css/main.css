@@ -131,6 +131,9 @@ h2.tagline {
   position: relative; }
   .user .username {
     cursor: pointer; }
+    .user .username img {
+      vertical-align: middle;
+      padding: 0 0.4em 0 0.2em; }
   .user .menu {
     display: none;
     position: absolute;

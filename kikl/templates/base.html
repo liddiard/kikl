@@ -20,13 +20,13 @@
             <div class="account-actions{% if user.is_authenticated %} auth{% endif %}">
                 {% if user.is_authenticated %}
                     <span class="user">
-                        <span class="username">{{ user }}</span>
+                        <span class="username">{{ user }}<img src="{{ STATIC_URL }}img/drop.png"/></span>
                         <ul class="menu">
                             <li class="email">{{ user.email }}</li>
                             <li><a href="{% url 'auth_password_change' %}">Change password</a></li>
                             <li class="delete-account"><a href="{% url 'account_delete' %}">Delete account</a></li>
                         </ul>
-                    </span> | 
+                    </span>
                     <a href="{% url 'auth_logout' %}">Log out</a>
                 {% else %}
                     <a href="{% url 'auth_login' %}">Log in</a> or 
