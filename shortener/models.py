@@ -24,11 +24,11 @@ class Word(models.Model):
 
 
 class Adjective(Word):
-    word = models.CharField(max_length=16)
+    word = models.CharField(max_length=16, unique=True)
 
 
 class Noun(Word):
-    word = models.CharField(max_length=16)
+    word = models.CharField(max_length=16, unique=True)
 
 
 class Link(models.Model):
