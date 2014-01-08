@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}kikl.co{% endblock %}</title>
+    <title>{% block title %}kikl.co: Tiny, short-lived, memorable URLs.{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css">
     <link href='http://fonts.googleapis.com/css?family=Nunito:700' rel='stylesheet' type='text/css'>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -15,7 +15,7 @@
             <a class="banner" href="{% url 'front' %}">
                 <h1 class="banner">kikl<span class="highlight">.</span>co</h1>
             </a>
-                <h2 class="tagline">Tiny, short-lived, memorable links.</h2>
+                <h2 class="tagline">Tiny, short-lived, memorable URLs.</h2>
             <div class="account-actions{% if user.is_authenticated %} auth{% endif %}">
                 {% if user.is_authenticated %}
                     <span class="user">
