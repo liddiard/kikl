@@ -52,10 +52,20 @@ dt {
 
 form {
     &.main {
+        position: relative;
+
         input {
             width: 100%;
             font-size: 2em;
             @include box_sizing;
+        }
+
+        .convert {
+            display: none;
+            position: absolute;
+            right: -45px;
+            top: 12px;
+            font-size: 4em;
         }
     }
 }

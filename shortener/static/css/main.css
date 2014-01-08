@@ -34,12 +34,20 @@ dd {
 dt {
   margin: 0.75em 0 0.25em 0; }
 
-form.main input {
-  width: 100%;
-  font-size: 2em;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
+form.main {
+  position: relative; }
+  form.main input {
+    width: 100%;
+    font-size: 2em;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+  form.main .convert {
+    display: none;
+    position: absolute;
+    right: -45px;
+    top: 12px;
+    font-size: 4em; }
 
 button {
   background-color: red;

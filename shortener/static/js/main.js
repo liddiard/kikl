@@ -46,6 +46,7 @@ function ajaxAddLink(target) {
             $('.link-url').html(decorated_url);
             var time_url = url+'/time';
             $('.check-time-remaining').html('You can check the time remaining on this link anytime by going to <a href="'+time_url+'">'+time_url+'</a>.');
+            $('.convert').show();
             $('button.add-another').show();
         }
         else { // there's an error
