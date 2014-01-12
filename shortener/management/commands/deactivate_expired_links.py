@@ -1,3 +1,4 @@
+import urllib2 # temp
 from django.core.management.base import BaseCommand, CommandError
 from shortener.models import Link
 
@@ -8,3 +9,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for link in Link.objects.filter(is_active=True):
             link.deactivate_if_expired()
+        urllib2.urlopen('http://gifdatabase.herokuapp.com/')
