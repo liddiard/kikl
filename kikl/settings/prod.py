@@ -9,8 +9,5 @@ DATABASES = {
 }
 
 # email settings
-EMAIL_HOST = "smtp.mandrillapp.com"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = get_env_variable('MANDRILL_USERNAME')
-EMAIL_HOST_PASSWORD = get_env_variable('MANDRILL_APIKEY')
+EMAIL_HOST_USER = get_env_variable('MANDRILL_API_KEY')
 DEFAULT_FROM_EMAIL = "kikl.co <no-reply@kikl.co>"
