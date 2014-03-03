@@ -19,11 +19,20 @@ S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
 STATIC_URL = S3_URL
 
+msg ="Set the %s environment variable" 
+def get_env_variable(var_name): 
+    try: 
+        return os.environ[var_name] 
+    except KeyError: 
+        error_msg = msg % var_name 
+        raise ImproperlyConfigured(error_msg)
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 't(3spl(_d*-4gjt01x6_^zvr&!kpo3!=7#9rps%h8augwket#6'
+SECRET_KEY = get_env_variable('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -88,11 +97,3 @@ TEMPLATE_DIRS = (
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
-
-msg ="Set the %s environment variable" 
-def get_env_variable(var_name): 
-    try: 
-        return os.environ[var_name] 
-    except KeyError: 
-        error_msg = msg % var_name 
-        raise ImproperlyConfigured(error_msg)
