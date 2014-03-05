@@ -199,8 +199,7 @@ h2.tagline {
     font-size: 3em; }
   .link-url.medium {
     font-size: 2em;
-    margin-bottom: 0;
-    -webkit-font-smoothing: antialiased; }
+    margin-bottom: 0; }
 
 .username {
   -webkit-font-smoothing: antialiased;
