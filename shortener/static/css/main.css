@@ -95,6 +95,8 @@ header {
     margin-top: 5px; }
     header .account-actions.auth {
       margin-top: 15px; }
+    header .account-actions .logout {
+      font-size: 0.9em; }
 
 section.link {
   width: 100%;
@@ -116,7 +118,8 @@ h1.banner {
 h2.tagline {
   display: inline;
   font-weight: normal;
-  padding-left: 0.4em; }
+  padding-left: 0.4em;
+  -webkit-font-smoothing: antialiased; }
 
 #wrap {
   max-width: 960px;
@@ -200,6 +203,7 @@ h2.tagline {
     -webkit-font-smoothing: antialiased; }
 
 .username {
+  -webkit-font-smoothing: antialiased;
   font-weight: bold; }
 
 .target {

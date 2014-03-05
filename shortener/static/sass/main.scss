@@ -140,6 +140,10 @@ header {
         &.auth {
             margin-top: 15px;
         }
+
+        .logout {
+            font-size: 0.9em;
+        }
     }
 }
 
@@ -169,6 +173,7 @@ h2.tagline {
     display: inline;
     font-weight: normal;
     padding-left: 0.4em;
+    -webkit-font-smoothing: antialiased;
 }
 
 #wrap {
@@ -283,6 +288,7 @@ h2.tagline {
 }
 
 .username {
+    -webkit-font-smoothing: antialiased;
     font-weight: bold;
 }
 
