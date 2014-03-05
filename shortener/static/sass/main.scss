@@ -162,6 +162,7 @@ footer {
 h1.banner {
     display: inline;
     font-family: 'Nunito', sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 h2.tagline {
@@ -254,6 +255,7 @@ h2.tagline {
     font-weight: bold;
     font-size: 3.2em;
     margin: 0.25em 0;
+    -webkit-font-smoothing: antialiased;
 }
 
 .elevator-pitch {
@@ -276,6 +278,7 @@ h2.tagline {
     &.medium {
         font-size: 2em;
         margin-bottom: 0;
+        -webkit-font-smoothing: antialiased;
     }
 }
 

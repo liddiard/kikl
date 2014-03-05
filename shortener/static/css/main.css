@@ -110,7 +110,8 @@ footer {
 
 h1.banner {
   display: inline;
-  font-family: 'Nunito', sans-serif; }
+  font-family: 'Nunito', sans-serif;
+  -webkit-font-smoothing: antialiased; }
 
 h2.tagline {
   display: inline;
@@ -179,7 +180,8 @@ h2.tagline {
 .lead {
   font-weight: bold;
   font-size: 3.2em;
-  margin: 0.25em 0; }
+  margin: 0.25em 0;
+  -webkit-font-smoothing: antialiased; }
 
 .elevator-pitch {
   line-height: 1.4; }
@@ -194,7 +196,8 @@ h2.tagline {
     font-size: 3em; }
   .link-url.medium {
     font-size: 2em;
-    margin-bottom: 0; }
+    margin-bottom: 0;
+    -webkit-font-smoothing: antialiased; }
 
 .username {
   font-weight: bold; }
