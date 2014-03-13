@@ -235,3 +235,7 @@ h2.tagline {
 
 .check-time-remaining {
   margin: 1em 0; }
+
+@media (max-width: 480px) {
+  .link-url.large, .link-url.medium {
+    font-size: 1.5em; } }
