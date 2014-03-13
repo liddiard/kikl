@@ -237,5 +237,11 @@ h2.tagline {
   margin: 1em 0; }
 
 @media (max-width: 480px) {
+  .lead {
+    font-size: 2.2em; }
+
+  form.main input {
+    font-size: 1.5em; }
+
   .link-url.large, .link-url.medium {
     font-size: 1.5em; } }
