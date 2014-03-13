@@ -21,7 +21,7 @@
 {% include 'linklet_large.html' %}
 
 {% if not user.is_authenticated %}
-    <p>Need to add more time on your links? <a href="{% url 'auth_login' %}">Log in</a> or <a href="{% url 'registration_register' %}">create an account</a> to increase their time up to double.</p>
+    <p>Want to add more time to your links? <a href="{% url 'auth_login' %}">Log in</a> or <a href="{% url 'registration_register' %}">create an account</a> to increase their time up to double.</p>
 {% endif %}
 
 {% endblock %}
