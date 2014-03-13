@@ -8,3 +8,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for link in Link.objects.filter(is_active=True):
             link.deactivate_if_expired()
+            print "Deactivated %s." % link
