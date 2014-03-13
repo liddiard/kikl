@@ -47,7 +47,7 @@ class Link(models.Model):
         return "%s-%s" % (self.adjective, self.noun)
 
     def deactivate_if_expired(self):
-        if self.time_added + timedelta(hours=1) < datetime.now():
+        if self.time_added + timedelta(minutes=self.duration) < datetime.now():
             self.is_active = False
             self.save()
 
