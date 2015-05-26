@@ -2,7 +2,11 @@ MAX_LINK_DURATION = 120;
 
 $(document).ready(function() {
     var add_link = $('.add-link');
-    add_link.on('input', function(){ addLinkInputChange(add_link) });
+    add_link.on('input', function(event){ 
+        if (event.keyCode === 13) // enter key
+            event.preventDefault(); // prevent regular form submission
+        addLinkInputChange(add_link);
+    });
     $('button.add-another').click(function(){
         add_link.prop('disabled', false).val('').focus();
         $(this).hide();
