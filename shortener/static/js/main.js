@@ -2,9 +2,11 @@ MAX_LINK_DURATION = 120;
 
 $(document).ready(function() {
     var add_link = $('.add-link');
-    add_link.on('input', function(event){ 
-        if (event.keyCode === 13) // enter key
-            event.preventDefault(); // prevent regular form submission
+    add_link.on('keydown', function(event){
+      if (event.keyCode === 13) // enter key
+          event.preventDefault(); // prevent regular form submission
+    });
+    add_link.on('input', function(){ 
         addLinkInputChange(add_link);
     });
     $('button.add-another').click(function(){
@@ -127,7 +129,7 @@ function timer(link) { // http://stackoverflow.com/a/5927432
         }
         var now = new Date();
         var elapsed_time = now.getTime() - before.getTime();
-        if (elapsed_time > interval) 
+        if (elapsed_time > interval)
             link.attr('data-remaining', remaining - Math.floor(elapsed_time/interval));
         else
             link.attr('data-remaining', remaining - 1);
@@ -177,5 +179,5 @@ function ajaxPost(params, endpoint, callback_success) {
         error: function(xhr, textStatus, errorThrown) {
             console.log("Oh no! Something went wrong. Please report this error: \n"+errorThrown+xhr.status+xhr.responseText);
         }
-    }); 
+    });
 }
