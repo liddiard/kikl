@@ -14,8 +14,8 @@ from django.views.generic.edit import FormView
 from .models import Adjective, Noun, Link
 from .forms import ConfirmCurrentUserForm
 
-MAX_ANON_LINKS = 10
-MAX_AUTH_LINKS = 20
+MAX_ANON_LINKS = 20
+MAX_AUTH_LINKS = 40
 MAX_LINK_DURATION = 120
 
 # utility functions

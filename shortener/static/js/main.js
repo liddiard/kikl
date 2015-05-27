@@ -60,7 +60,7 @@ function ajaxAddLink(target) {
                 error.text('Whoops, that\'s not a valid URL!')
             }
             else if (response.error === "AccessError") {
-                error.text('You are limited to 10 active links at a time. Log in or create an account to double this limit.')
+                error.text('You are limited to 20 active links at a time. Log in or create an account to double this limit.')
             }
             else if (response.error === "CapacityError") {
                 error.text('Uh oh! kikl.co is currently at capacity. An administrator has been notified; check back in a bit to try again. Sorry for the inconvenience!')
