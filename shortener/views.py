@@ -34,7 +34,7 @@ class FrontPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(FrontPageView, self).get_context_data(**kwargs)
-        context['sample_paths'] = ['sexy-jellyfish', 'fabulous-anteater', 
+        context['sample_paths'] = ['goofy-lemur', 'fabulous-anteater', 
                                    'awkward-puffin']
         return context
 
