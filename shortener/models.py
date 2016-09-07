@@ -36,7 +36,7 @@ class Link(models.Model):
     noun = models.ForeignKey('Noun')
     target = models.URLField() 
         # default max_length=200; may need to be increased
-    ip_added = models.IPAddressField()
+    ip_added = models.GenericIPAddressField()
     duration = models.PositiveIntegerField(default=60) # minutes
     user_added = models.ForeignKey(User, blank=True, 
                                    null=True)

@@ -1,9 +1,9 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 
 from shortener import views
 
-urlpatterns = patterns('',
+urlpatterns = [
 
       #override the default urls
       url(r'^password/change/$',
@@ -31,4 +31,4 @@ urlpatterns = patterns('',
 
       #and now add the registration urls
       url(r'', include('registration.backends.default.urls')),
-)
+]

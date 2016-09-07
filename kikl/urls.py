@@ -1,11 +1,11 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 
 from shortener import views
 
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     # front
     url(r'^$', views.FrontPageView.as_view(), name='front'),
 
@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     # accounts
-    (r'^accounts/', include('kikl.urls_accounts')),
+    url(r'^accounts/', include('kikl.urls_accounts')),
 
     # main
     url(r'^links/$', views.LinksView.as_view(), name='links'),
@@ -26,4 +26,4 @@ urlpatterns = patterns('',
         name='link'),
     url(r'^(?P<adjective>\S+)-(?P<noun>\S+)/$', views.target_view, 
         name='target'),
-)
+]
