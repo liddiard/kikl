@@ -9,6 +9,9 @@ DATABASES = {
 }
 
 # email settings
-MANDRILL_API_KEY = get_env_variable('MANDRILL_API_KEY')
-EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_HOST_USER = get_env_variable('SENDGRID_USERNAME')
+EMAIL_HOST_PASSWORD = get_env_variable('SENDGRID_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "kikl.co <no-reply@kikl.co>"
