@@ -36,7 +36,6 @@ SECRET_KEY = get_env_variable('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '.herokuapp.com', 'kikl.co']
 
@@ -53,7 +52,6 @@ DJANGO_APPS = (
 )
 
 THIRD_PARTY_APPS = (
-    'south',
     'registration',
     'djrill',
 )
@@ -85,15 +83,24 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'America/Los_Angeles'
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+            ],
+        },
+    },
+]
+
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = False
-
-
-TEMPLATE_DIRS = (
-    BASE_DIR+'/templates',
-)
 
 ACCOUNT_ACTIVATION_DAYS = 7
