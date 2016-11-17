@@ -160,7 +160,7 @@ class AuthenticatedAjaxView(AjaxView):
 class AddLinkView(AjaxView):
 
     def post(self, request):
-        user_ip = request.META['REMOTE_ADDR']
+        user_ip = request.META['X-Forwarded-For']
         target = request.POST.get('target')
         if target is None:
             return self.key_error('Required key "target" not found in request.')
