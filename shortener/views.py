@@ -160,6 +160,7 @@ class AuthenticatedAjaxView(AjaxView):
 class AddLinkView(AjaxView):
 
     def post(self, request):
+        return self.success(meta=request.META)
         user_ip = request.META['X-Forwarded-For']
         target = request.POST.get('target')
         if target is None:
