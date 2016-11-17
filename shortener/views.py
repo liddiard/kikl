@@ -11,6 +11,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView
 
+from ipware.ip import get_ip
+
 from .models import Adjective, Noun, Link
 from .forms import ConfirmCurrentUserForm
 
@@ -160,8 +162,10 @@ class AuthenticatedAjaxView(AjaxView):
 class AddLinkView(AjaxView):
 
     def post(self, request):
-        return self.success(meta=request.META)
-        user_ip = request.META['X-Forwarded-For']
+        # http://stackoverflow.com/a/16203978
+        user_ip = get_ip(request)
+        if user_ip is None:
+          return self.access_error('Could not get user IP address from request.')
         target = request.POST.get('target')
         if target is None:
             return self.key_error('Required key "target" not found in request.')
