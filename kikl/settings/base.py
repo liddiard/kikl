@@ -18,6 +18,7 @@ AWS_STORAGE_BUCKET_NAME = 'kikl'
 S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
 STATIC_URL = S3_URL
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 msg ="Set the %s environment variable" 
 def get_env_variable(var_name): 
