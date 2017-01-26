@@ -53,9 +53,9 @@ button {
   outline: none;
   cursor: pointer; }
   button:hover {
-    background-color: #ee0000; }
+    background-color: #cc0000; }
   button:active {
-    background-color: #dd0000; }
+    background-color: #990000; }
   button.disabled {
     opacity: 0.5;
     cursor: default; }
@@ -66,10 +66,12 @@ button {
   button.add-another {
     display: none;
     float: right;
-    margin-top: 1.5em; }
+    margin-top: 1em;
+    font-size: 1.5em; }
   button.add-time {
     float: right;
-    margin: 0.75em 0; }
+    margin: 0.75em 0;
+    font-size: 1.25em; }
 
 input {
   background-color: rgba(255, 255, 0, 0.3);
