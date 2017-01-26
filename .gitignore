@@ -3,3 +3,4 @@
 *.sass-cache
 scripts/connect_ec2.sh
 .DS_Store
+*.map
