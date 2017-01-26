@@ -187,7 +187,8 @@ h2.tagline {
   -webkit-font-smoothing: antialiased; }
 
 .elevator-pitch {
-  line-height: 1.4; }
+  line-height: 1.4;
+  font-size: 1.25em; }
 
 .link-url {
   color: yellow;
