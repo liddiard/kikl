@@ -191,11 +191,11 @@ h2.tagline {
   font-size: 1.25em; }
 
 .link-url {
-  color: yellow;
+  color: white;
   display: inline-block;
   font-weight: normal; }
   .link-url .path {
-    color: white; }
+    color: yellow; }
   .link-url.large {
     font-size: 3em; }
   .link-url.medium {

@@ -74,11 +74,11 @@ button {
     cursor: pointer;
 
     &:hover {
-        background-color: $background_color - #111;
+        background-color: darken($background_color, 10%);
     }
 
     &:active {
-        background-color: $background_color - #222;
+        background-color: darken($background_color, 20%);
     }
 
     &.disabled {
@@ -97,12 +97,14 @@ button {
     &.add-another {
         display: none;
         float: right;
-        margin-top: 1.5em;
+        margin-top: 1em;
+        font-size: 1.5em;
     }
 
     &.add-time {
         float: right;
         margin: 0.75em 0;
+        font-size: 1.25em;
     }
 }
 
@@ -269,12 +271,12 @@ h2.tagline {
 }
 
 .link-url {
-    color: yellow;
+    color: white;
     display: inline-block;
     font-weight: normal;
 
     .path {
-        color: white;
+        color: yellow;
     }
 
     &.large {
