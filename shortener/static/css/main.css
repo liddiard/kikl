@@ -1,22 +1,22 @@
 ::-webkit-input-placeholder {
-  color: orange; }
+  color: yellow; }
 
 :-moz-placeholder {
   /* Firefox 18- */
-  color: orange; }
+  color: yellow; }
 
 ::-moz-placeholder {
   /* Firefox 19+ */
-  color: orange; }
+  color: yellow; }
 
 :-ms-input-placeholder {
-  color: orange; }
+  color: yellow; }
 
 body {
   margin: 0;
   border: 0;
   padding: 0;
-  background-color: #ff8000;
+  background-color: #9B4E00;
   color: white;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
@@ -245,3 +245,5 @@ h2.tagline {
 
   .link-url.large, .link-url.medium {
     font-size: 1.5em; } }
+
+/*# sourceMappingURL=main.css.map */
