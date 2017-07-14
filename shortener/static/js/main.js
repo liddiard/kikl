@@ -129,11 +129,11 @@ function timer(link) { // http://stackoverflow.com/a/5927432
     var interval = 1000;
     this.interval_id = setInterval(function(){
         var remaining = parseInt(link.attr('data-remaining'));
-        var total = parseInt(link.attr('data-total')) * 60;
+        var total = parseInt(link.attr('data-total')) * 3600;
         set_progress_bar(progress_bar, remaining, total);
         if (remaining <= 0) {
             clearInterval(this.interval_id);
-            time.text('0:00');
+            time.text('0h 0m 0s');
             link.find('button.add-time').unbind('click').addClass('disabled');
             return;
         }
@@ -144,7 +144,7 @@ function timer(link) { // http://stackoverflow.com/a/5927432
         else
             link.attr('data-remaining', remaining - 1);
         var ft = format_time(remaining);
-        time.text([ft.hours, pad(ft.minutes), pad(ft.seconds)].join(':'));
+        time.text(`${ft.hours}h ${ft.minutes}m ${ft.seconds}s`);
         before = new Date();
     }, interval);
 }
@@ -158,10 +158,6 @@ function set_progress_bar(elem, remaining, total) {
 
 
 /* utility functions */
-
-function pad(n) { // http://stackoverflow.com/a/2998822
-    return (n < 10) ? ("0" + n) : n;
-}
 
 function getCookie(name) {
     var cookieValue = null;
