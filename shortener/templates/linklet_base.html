@@ -4,5 +4,5 @@
         &raquo; <a href="{{ link.target }}">{{ link.target }}</a>
     </div>
     <div class="{% block progress_size %}{% endblock %} progress-container"><div class="progress-bar"><h2 class="timer"></h2></div></div>
-    {% if user.is_authenticated %}<button class="{% if link.duration >= MAX_LINK_DURATION %}disabled {% endif %}add-time">+10 minutes</button>{% endif %}
+    {% if user.is_authenticated %}<button class="{% if link.duration >= MAX_LINK_DURATION %}disabled {% endif %}add-time">+1 hour</button>{% endif %}
 </section>

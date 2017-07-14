@@ -1,4 +1,4 @@
-MAX_LINK_DURATION = 120;
+MAX_LINK_DURATION = 48;
 
 $(document).ready(function() {
     var add_link = $('.add-link');
@@ -107,9 +107,19 @@ function build_url(path, decorated) {
 }
 
 function format_time(secs) {
-    var minutes = Math.floor(secs/60);
-    var seconds = secs - minutes*60;
-    return {total: secs, minutes: minutes, seconds: seconds};
+    let remaining = secs;
+    const hours = Math.floor(secs/3600);
+    remaining = secs - (hours*3600);
+    const minutes = Math.floor(remaining/60);
+    remaining = remaining - (minutes*60);
+    const seconds = remaining;
+
+    return {
+        total: secs, 
+        hours: hours,
+        minutes: minutes, 
+        seconds: seconds
+    };
 }
 
 function timer(link) { // http://stackoverflow.com/a/5927432
@@ -134,7 +144,7 @@ function timer(link) { // http://stackoverflow.com/a/5927432
         else
             link.attr('data-remaining', remaining - 1);
         var ft = format_time(remaining);
-        time.text(ft.minutes+':'+pad(ft.seconds));
+        time.text([ft.hours, pad(ft.minutes), pad(ft.seconds)].join(':'));
         before = new Date();
     }, interval);
 }

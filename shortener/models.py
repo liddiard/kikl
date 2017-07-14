@@ -37,7 +37,7 @@ class Link(models.Model):
     target = models.URLField() 
         # default max_length=200; may need to be increased
     ip_added = models.GenericIPAddressField()
-    duration = models.PositiveIntegerField(default=60) # minutes
+    duration = models.PositiveIntegerField(default=24) # hours
     user_added = models.ForeignKey(User, blank=True, 
                                    null=True)
     time_added = models.DateTimeField(auto_now_add=True)
@@ -47,12 +47,12 @@ class Link(models.Model):
         return "%s-%s" % (self.adjective, self.noun)
 
     def deactivate_if_expired(self):
-        if self.time_added + timedelta(minutes=self.duration) < datetime.now():
+        if self.time_added + timedelta(hours=self.duration) < datetime.now():
             self.is_active = False
             self.save()
 
     def secs_remaining(self):
-        time_delta = (self.time_added + timedelta(minutes=self.duration))\
+        time_delta = (self.time_added + timedelta(hours=self.duration))\
                       - datetime.now()
         delta_secs = time_delta.total_seconds()
         if delta_secs > 0:

@@ -16,9 +16,9 @@ from ipware.ip import get_ip
 from .models import Adjective, Noun, Link
 from .forms import ConfirmCurrentUserForm
 
-MAX_ANON_LINKS = 20
-MAX_AUTH_LINKS = 40
-MAX_LINK_DURATION = 120
+MAX_ANON_LINKS = 10
+MAX_AUTH_LINKS = 20
+MAX_LINK_DURATION = 48 # hours
 
 # utility functions
 
@@ -227,7 +227,7 @@ class IncreaseDurationView(AuthenticatedAjaxView):
         if l.duration >= MAX_LINK_DURATION:
             return self.access_error('Max link duration of %s minutes reached.' 
                                      % MAX_LINK_DURATION)
-        l.duration += 10
+        l.duration += 1
         l.save()
         return self.success(link=l.pk, new_duration=l.duration, 
                             new_secs_remaining=l.secs_remaining())
