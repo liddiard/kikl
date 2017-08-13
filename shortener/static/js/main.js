@@ -50,7 +50,7 @@ function ajaxAddLink(target) {
             var url = build_url(response.path, false);
             var decorated_url = build_url(response.path, true);
             $('.link-url').html(decorated_url);
-            var time_url = url+'/time/';
+            var time_url = location.protocol+'//'+url+'/time/';
             $('.check-time-remaining').html('You can check the time remaining on this link by going to <a href="'+time_url+'">'+time_url+'</a>.');
             $('button.add-another').show();
         }
@@ -99,7 +99,7 @@ function ajaxIncreaseDuration(link) {
 
 function build_url(path, decorated) {
     var decorated = decorated || false;
-    var prefix = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/'
+    var prefix = location.hostname+(location.port ? ':'+location.port: '')+'/'
     if (decorated)
         var path = '<span class="path">'+path+'</span>';
     var url = prefix + path;
