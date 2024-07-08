@@ -1,0 +1,12 @@
+services:
+  django:
+    container_name: django
+    entrypoint: /app/entrypoint.sh
+    build: .
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    # restart: unless-stopped

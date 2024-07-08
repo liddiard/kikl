@@ -1,0 +1,5 @@
+# cron job to mark expired links – those whose creation time + duration exceeds
+# the current time – as inactive
+0 * * * * /usr/local/bin/python /app/manage.py deactivate_expired_links >> /var/log/cron.log 2>&1
+
+# remember to end this file with an empty new line

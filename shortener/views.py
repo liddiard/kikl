@@ -1,32 +1,24 @@
-import json
-from urlparse import urlparse
+from datetime import timedelta
 
-from django.http import HttpResponse, Http404
+from django.http import JsonResponse, HttpResponseNotFound
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse_lazy
-from django.contrib.auth import login as django_login, logout as django_logout
-from django.shortcuts import redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from django.views.generic.base import View, TemplateView
-from django.views.generic.edit import FormView
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect, get_object_or_404
 
-from ipware.ip import get_ip
+from ipware import get_client_ip
 
 from .models import Adjective, Noun, Link
-from .forms import ConfirmCurrentUserForm
+from .mixins import ValidationMixin
 
-MAX_ANON_LINKS = 10
-MAX_AUTH_LINKS = 20
-MAX_LINK_DURATION = 48 # hours
 
-# utility functions
-
-def get_link(adjective, noun):
-    a = get_object_or_404(Adjective, word=adjective)
-    n = get_object_or_404(Noun, word=noun)
-    link = get_object_or_404(Link, is_active=True, adjective=a, noun=n)
-    return link
+# maximum number of links per user
+MAX_USER_LINKS = 10
+# maximum duration of a link (hours)
+MAX_LINK_DURATION = 24 * 7 # 1 week
 
 # pages
 
@@ -41,193 +33,194 @@ class FrontPageView(TemplateView):
         return context
 
 
-def target_view(request, adjective, noun):
-    link = get_link(adjective, noun)
-    link.deactivate_if_expired()
-    if link.is_active:
-        return redirect(link.target)
-    else:
-        raise Http404
-
-
-class LinkView(TemplateView):
-    
-    template_name = "link.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(LinkView, self).get_context_data(**kwargs)
-        adjective = self.kwargs.get('adjective')
-        noun = self.kwargs.get('noun')
-        context['link'] = get_link(adjective, noun)
-        context['MAX_LINK_DURATION'] = MAX_LINK_DURATION
-        return context
-
-
-class LinksView(TemplateView):
-    
-    template_name = "links.html"
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(LinksView, self).dispatch(*args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(LinksView, self).get_context_data(**kwargs)
-        context['links'] = Link.objects.filter(is_active=True, 
-                                               user_added=self.request.user)
-        context['MAX_LINK_DURATION'] = MAX_LINK_DURATION
-        return context
-
-
 class AboutPageView(TemplateView):
     pass
 
 
-class AccountDeleteView(FormView):
-
-    template_name = "registration/account_delete_form.html" 
-    form_class = ConfirmCurrentUserForm
-    success_url = reverse_lazy('account_delete_complete')
-
-    def get_form_kwargs(self):
-        kwargs = super(AccountDeleteView, self).get_form_kwargs()
-        kwargs.update({
-            'request' : self.request
-        })
-        return kwargs
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            return redirect('front')
-        return super(AccountDeleteView, self).dispatch(request, *args, **kwargs)
-    
-    def form_valid(self, form):
-        user = form.cleaned_data.get('user')
-        user.is_active = False
-        user.save()
-        django_logout(self.request)
-        return redirect('account_delete_complete')
+# redirect to link
+def target_view(request, adjective, noun):
+    a = get_object_or_404(Adjective, word=adjective)
+    n = get_object_or_404(Noun, word=noun)
+    link = get_object_or_404(Link, is_active=True, adjective=a, noun=n)
+    link.deactivate_if_expired()
+    if link.is_active:
+        return redirect(link.target)
+    else:
+        return HttpResponseNotFound()
 
 
-class AccountDeleteCompleteView(TemplateView):
-    
-    template_name = "registration/account_delete_complete.html"
+# API
 
+@method_decorator(csrf_exempt, name='dispatch')
+class LinkView(ValidationMixin, View):
 
-# api
+    # return an array of links' metadata given their UUIDs
+    def get(self, request):
+        body, error = self.parse_json_body(request)
+        if error is not None:
+            return error
+        
+        if "uuids" not in body:
+            return JsonResponse(
+                {'error': "Missing 'links' key in JSON payload"},
+                status=400
+            )
+        links = body["uuids"]
 
-class AjaxView(View):
+        if not isinstance(links, list):
+            return JsonResponse(
+                {'error': "'links' key in JSON payload must be an array"},
+                status=400
+            )
+        
+        if len(links) > MAX_USER_LINKS:
+            return JsonResponse(
+                {'error': f"Cannot query for more than {MAX_USER_LINKS} "
+                 "links"}, status=400
+            )
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.is_ajax():
-            return super(AjaxView, self).dispatch(request, *args, **kwargs)
-        else:
-            raise Http404
+        for uuid in links:
+            if not self.validate_uuid(uuid):
+                return JsonResponse(
+                    {'error': f"'{uuid}' is not a valid UUID"},
+                    status=400
+                )
+        
+        links = Link.objects.filter(uuid__in=links)
+        for link in links:
+            link.deactivate_if_expired()
 
-    def json_response(self, **kwargs):
-        return HttpResponse(json.dumps(kwargs), content_type="application/json")
+        links_json = [link.to_json() for link in links]
+        return JsonResponse({'links': links_json}, status=200)
 
-    def success(self, **kwargs):
-        return self.json_response(result=0, **kwargs)
-
-    def error(self, error_type, message):
-        return self.json_response(result=1, error=error_type, message=message)
-
-    def authentication_error(self):
-        return self.error("AuthenticationError", "User is not authenticated.")
-
-    def access_error(self, message):
-        return self.error("AccessError", message)
-
-    def key_error(self, message):
-        return self.error("KeyError", message)
-
-    def does_not_exist(self, message):
-        return self.error("DoesNotExist", message)
-
-    def validation_error(self, message):
-        return self.error("ValidationError", message)
-
-
-class AuthenticatedAjaxView(AjaxView):
-    
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
-            return super(AuthenticatedAjaxView, self).dispatch(request, *args,
-                                                               **kwargs)
-        else:
-            return self.authentication_error()
-
-
-class AddLinkView(AjaxView):
-
+    # add a new link
     def post(self, request):
         # http://stackoverflow.com/a/16203978
-        user_ip = get_ip(request)
-        if user_ip is None:
-          return self.access_error('Could not get user IP address from request.')
-        target = request.POST.get('target')
-        if target is None:
-            return self.key_error('Required key "target" not found in request.')
-        parsed = urlparse(target)
-        if not parsed.scheme and not parsed.netloc:
-            return self.validation_error('Target URL is missing protocol or '
-                                         'domain.')
-        if request.user.is_authenticated():
-            max_links = MAX_AUTH_LINKS
-            links = Link.objects.filter(user_added=request.user)
-        else:
-            max_links = MAX_ANON_LINKS
-            links = Link.objects.filter(ip_added=user_ip)
+        client_ip, is_routable = get_client_ip(request)
+        if client_ip is None:
+          return JsonResponse({'error': 'Could not determine IP address.'},
+                              status=401)
+        
+        body, error = self.parse_json_body(request)
+        if error is not None:
+            return error
+        
+        # Validate that "url" key exists in JSON
+        if "url" not in body:
+            return JsonResponse(
+                {'error': "Missing 'url' key in JSON payload"},
+                status=400
+            )
+
+        # Validate the URL format
+        target = body["url"]
+        validator = URLValidator()
+        try:
+            validator(target)
+        except ValidationError:
+            return JsonResponse({'error': "Invalid URL format"},
+                                status=400)
+        
+        # Validate that user has not reached max number of links
+        links = Link.objects.filter(ip_added=client_ip)
         active_links = links.filter(is_active=True)
-        if (active_links.count() >= max_links):
-            return self.access_error('User already has max number of active '
-                                     'links (%s).' % max_links)
+        if (active_links.count() >= MAX_USER_LINKS):
+            return JsonResponse({'error': f"User has reached the maximum "
+                                 "number of active links allowed "
+                                 "({MAX_USER_LINKS})"})
+        
+        # Get a random adjective
         adjective = Adjective.objects.order_by('?')[0]
-        noun_query = '''
-            SELECT * FROM shortener_noun WHERE shortener_noun.id NOT IN 
-            (SELECT shortener_noun.id FROM shortener_noun LEFT OUTER JOIN 
-            shortener_link ON shortener_link.noun_id = shortener_noun.id 
-            WHERE shortener_link.is_active = 't' AND 
-            shortener_link.adjective_id = %s) ORDER BY RANDOM() LIMIT 1;
+        # Get a random noun that is not already in use in combination with the
+        # chosen adjective
+        noun_query = f'''
+            SELECT * 
+            FROM shortener_noun n 
+            WHERE NOT EXISTS (
+                SELECT 1 
+                FROM shortener_link 
+                WHERE shortener_link.noun_id = n.id 
+                AND shortener_link.is_active = 1 
+                AND shortener_link.adjective_id = %s
+            ) 
+            ORDER BY RANDOM() 
+            LIMIT 1;
         '''
         noun_queryset = Noun.objects.raw(noun_query, [adjective.id])
         try:
             noun = noun_queryset[0]
         except IndexError:
-            return self.error(error_type='CapacityError', message='No '
-                              'combination of link words is available at this '
-                              'time.')
-        if request.user.is_authenticated():
-            link = Link.objects.get_or_create(adjective=adjective, noun=noun,
-                                              target=target, ip_added=user_ip, 
-                                              user_added=request.user)[0]
-        else:
-            link = Link.objects.get_or_create(adjective=adjective, noun=noun,
-                                              target=target, 
-                                              ip_added=user_ip)[0]
-        return self.success(link=link.pk, path=link.path())
-
-
-class IncreaseDurationView(AuthenticatedAjaxView):
+            return JsonResponse({'error': "Temporarily at capacity: No "
+                                 "unused adjective/noun combinations are "
+                                 "available. Please try again later."},
+                                 status=503)
+        link = Link.objects.get_or_create(adjective=adjective, noun=noun,
+                                          target=target, ip_added=client_ip)[0]
+        return JsonResponse(link.to_json(), status=201)
     
-    def post(self, request):
-        link = request.POST.get('link')
-        if link is None:
-            return self.key_error('Required key "link" not found in request.')
-        try:
-            l = Link.objects.get(id=int(link))
-        except (ValueError, Link.DoesNotExist):
-            return self.does_not_exist('Link matching id %s does not exist.' 
-                                       % link)
-        l.deactivate_if_expired()
-        if not l.is_active:
-            return self.does_not_exist('Link matching id %s has expired.'
-                                       % link)
-        if l.duration >= MAX_LINK_DURATION:
-            return self.access_error('Max link duration of %s minutes reached.' 
-                                     % MAX_LINK_DURATION)
-        l.duration += 1
-        l.save()
-        return self.success(link=l.pk, new_duration=l.duration, 
-                            new_secs_remaining=l.secs_remaining())
+    # update the duration (time to live) of an existing link from its UUID
+    def patch(self, request):
+        body, error = self.parse_json_body(request)
+        if error is not None:
+            return error
+        
+        if "uuid" not in body:
+            return JsonResponse(
+                {'error': "Missing 'uuid' key in JSON payload"},
+                status=400
+            )
+        uuid = body['uuid']
+
+        if not self.validate_uuid(uuid):
+            return JsonResponse(
+                {'error': f"'{uuid}' is not a valid UUID"},
+                status=400
+            )
+        
+        if "duration" not in body:
+            return JsonResponse(
+                {'error': "Missing 'duration' key in JSON payload"},
+                status=400
+            )
+        duration = body['duration']
+
+        if not isinstance(duration, int):
+            return JsonResponse(
+                {'error': "'duration' key must be an integer"},
+                status=400
+            )
+
+        if duration > MAX_LINK_DURATION:
+            return JsonResponse(
+                {'error': f"'duration' cannot be greater than "
+                 f"{MAX_LINK_DURATION} hours"}, status=400
+            )
+        
+        link = get_object_or_404(Link, uuid=uuid)
+        link.duration = timedelta(hours=duration)
+        link.save()
+        link.deactivate_if_expired()
+        return JsonResponse(link.to_json(), status=200)
+    
+    # delete an existing link given its UUID
+    def delete(self, request):
+        body, error = self.parse_json_body(request)
+        if error is not None:
+            return error
+        
+        if "uuid" not in body:
+            return JsonResponse(
+                {'error': "Missing 'uuid' key in JSON payload"},
+                status=400
+            )
+        uuid = body['uuid']
+
+        if not self.validate_uuid(uuid):
+            return JsonResponse(
+                {'error': f"'{uuid}' is not a valid UUID"},
+                status=400
+            )
+        
+        link = get_object_or_404(Link, uuid=uuid)
+        link.delete()
+        return JsonResponse({'uuid': uuid}, status=200)

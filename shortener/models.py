@@ -1,8 +1,12 @@
+import uuid
 from random import randint
-from datetime import datetime, timedelta
+from datetime import timedelta
+
+from django.utils import timezone
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.core import serializers
 
 
 class WordManager(models.Manager):
@@ -19,41 +23,41 @@ class Word(models.Model):
     class Meta:
         abstract = True
     
-    def __unicode__(self):
+    def __str__(self):
         return self.word
 
 
 class Adjective(Word):
-    word = models.CharField(max_length=16, unique=True)
+    word = models.CharField(max_length=16, unique=True, db_index=True)
 
 
 class Noun(Word):
-    word = models.CharField(max_length=16, unique=True)
+    word = models.CharField(max_length=16, unique=True, db_index=True)
 
 
 class Link(models.Model):
-    adjective = models.ForeignKey('Adjective')
-    noun = models.ForeignKey('Noun')
-    target = models.URLField() 
-        # default max_length=200; may need to be increased
-    ip_added = models.GenericIPAddressField()
-    duration = models.PositiveIntegerField(default=24) # hours
-    user_added = models.ForeignKey(User, blank=True, 
-                                   null=True)
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    adjective = models.ForeignKey('Adjective', on_delete=models.CASCADE)
+    noun = models.ForeignKey('Noun', on_delete=models.CASCADE)
+    # match max length of Django's URLValidator
+    target = models.URLField(max_length=2048)
+    ip_added = models.GenericIPAddressField(db_index=True)
+    # how long the link will be active in hours
+    duration = models.DurationField(default=timedelta(hours=24))
     time_added = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, db_index=True)
 
     def path(self):
-        return "%s-%s" % (self.adjective, self.noun)
+        return f"{self.adjective}-{self.noun}"
 
     def deactivate_if_expired(self):
-        if self.time_added + timedelta(hours=self.duration) < datetime.now():
+        if self.time_added + self.duration < timezone.now():
             self.is_active = False
             self.save()
 
     def secs_remaining(self):
         time_delta = (self.time_added + timedelta(hours=self.duration))\
-                      - datetime.now()
+                      - timezone.now()
         delta_secs = time_delta.total_seconds()
         if delta_secs > 0:
             return int(round(delta_secs))
@@ -67,9 +71,19 @@ class Link(models.Model):
         except Link.DoesNotExist:
             pass
         else:
-            if link.pk != self.pk:
+            if link.uuid != self.uuid:
                 raise ValidationError('An active link with the chosen '
                                       'adjective and noun already exists.')
+    
+    def to_json(self):
+        return {
+            'uuid': self.uuid,
+            'path': self.path(),
+            'target': self.target,
+            'duration': int(self.duration.total_seconds() / 3600), # hours
+            'time_added': self.time_added,
+            'is_active': self.is_active
+        }
 
-    def __unicode__(self):
-        return u"%s-%s \u00bb %s" % (self.adjective, self.noun, self.target)
+    def __str__(self):
+        return f"{self.adjective}-{self.noun} » {self.target}"
