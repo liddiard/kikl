@@ -1,13 +1,12 @@
 from datetime import timedelta
 
 from django.http import JsonResponse, HttpResponseNotFound
-from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from django.views.generic.base import View, TemplateView
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
+from django.middleware.csrf import get_token
 from django.shortcuts import redirect, get_object_or_404
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from ipware import get_client_ip
 
@@ -24,13 +23,7 @@ MAX_LINK_DURATION = 24 * 7 # 1 week
 
 class FrontPageView(TemplateView):
     
-    template_name = "front.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(FrontPageView, self).get_context_data(**kwargs)
-        context['sample_paths'] = ['goofy-lemur', 'fabulous-anteater', 
-                                   'awkward-puffin']
-        return context
+    template_name = "index.html"
 
 
 class AboutPageView(TemplateView):
@@ -51,42 +44,61 @@ def target_view(request, adjective, noun):
 
 # API
 
-@method_decorator(csrf_exempt, name='dispatch')
+@ensure_csrf_cookie
+def set_csrf_token(request):
+    """
+    Sets the CSRF cookie for the current user session and returns a JSON
+    response with a success message.
+
+    Parameters:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A JSON response with a success message indicating that
+        the CSRF cookie has been set.
+    """
+    return JsonResponse({'message': "CSRF cookie set"})
+
+
 class LinkView(ValidationMixin, View):
 
-    # return an array of links' metadata given their UUIDs
     def get(self, request):
-        body, error = self.parse_json_body(request)
-        if error is not None:
-            return error
+        """
+        A method that retrieves an array of links' metadata based on the
+        provided UUIDs.
         
-        if "uuids" not in body:
+        Parameters:
+            request (HttpRequest): The HTTP request object containing an array
+            of UUIDs.
+            
+        Returns:
+            JsonResponse: A JSON response containing the metadata of the
+            requested links.
+        """
+        uuids = request.GET.get('uuids')
+        
+        if uuids is None:
             return JsonResponse(
-                {'error': "Missing 'links' key in JSON payload"},
+                {'error': "Missing 'links' key in query params"},
                 status=400
             )
-        links = body["uuids"]
 
-        if not isinstance(links, list):
-            return JsonResponse(
-                {'error': "'links' key in JSON payload must be an array"},
-                status=400
-            )
+        uuids = uuids.split(',')
         
-        if len(links) > MAX_USER_LINKS:
+        if len(uuids) > MAX_USER_LINKS:
             return JsonResponse(
                 {'error': f"Cannot query for more than {MAX_USER_LINKS} "
                  "links"}, status=400
             )
 
-        for uuid in links:
+        for uuid in uuids:
             if not self.validate_uuid(uuid):
                 return JsonResponse(
                     {'error': f"'{uuid}' is not a valid UUID"},
                     status=400
                 )
         
-        links = Link.objects.filter(uuid__in=links)
+        links = Link.objects.filter(uuid__in=uuids).order_by('-time_added')
         for link in links:
             link.deactivate_if_expired()
 
@@ -95,10 +107,31 @@ class LinkView(ValidationMixin, View):
 
     # add a new link
     def post(self, request):
+        """
+        Create a new link for the user with this IP.
+
+        This function handles the HTTP POST request to create a new link for
+        the current user. It expects a JSON payload with a "target" key
+        containing the target URL. The function validates the URL format,
+        checks if the user has reached the maximum number of active links
+        allowed, and picks a random adjective and noun combination that is
+        not already in use. If successful, it creates a new Link object and
+        returns a JSON response with the created link's metadata.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object containing a target URL.
+
+        Returns:
+            JsonResponse: A JSON response containing the metadata of the created link.
+
+        Raises:
+            ValidationError: If the URL format is invalid.
+            IndexError: If there are no unused adjective/noun combinations available.
+        """
         # http://stackoverflow.com/a/16203978
         client_ip, is_routable = get_client_ip(request)
         if client_ip is None:
-          return JsonResponse({'error': 'Could not determine IP address.'},
+          return JsonResponse({'error': 'Missing IP address from request'},
                               status=401)
         
         body, error = self.parse_json_body(request)
@@ -106,14 +139,14 @@ class LinkView(ValidationMixin, View):
             return error
         
         # Validate that "url" key exists in JSON
-        if "url" not in body:
+        if "target" not in body:
             return JsonResponse(
-                {'error': "Missing 'url' key in JSON payload"},
+                {'error': "Missing 'target' key in JSON payload"},
                 status=400
             )
 
         # Validate the URL format
-        target = body["url"]
+        target = body["target"]
         validator = URLValidator()
         try:
             validator(target)
@@ -125,9 +158,9 @@ class LinkView(ValidationMixin, View):
         links = Link.objects.filter(ip_added=client_ip)
         active_links = links.filter(is_active=True)
         if (active_links.count() >= MAX_USER_LINKS):
-            return JsonResponse({'error': f"User has reached the maximum "
-                                 "number of active links allowed "
-                                 "({MAX_USER_LINKS})"})
+            return JsonResponse({'error': f"You have reached the maximum "
+                                 f"limit of {MAX_USER_LINKS} links."},
+                                 status=400)
         
         # Get a random adjective
         adjective = Adjective.objects.order_by('?')[0]
@@ -150,7 +183,7 @@ class LinkView(ValidationMixin, View):
         try:
             noun = noun_queryset[0]
         except IndexError:
-            return JsonResponse({'error': "Temporarily at capacity: No "
+            return JsonResponse({'error': "Temporarily at capacity. No "
                                  "unused adjective/noun combinations are "
                                  "available. Please try again later."},
                                  status=503)
@@ -160,6 +193,19 @@ class LinkView(ValidationMixin, View):
     
     # update the duration (time to live) of an existing link from its UUID
     def patch(self, request):
+        """
+        Updates the duration of a link identified by its UUID.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object containing a UUID.
+
+        Returns:
+            JsonResponse: The JSON response containing the updated link data
+            or an error message.
+
+        Raises:
+            Http404: If the link with the given UUID is not found.
+        """
         body, error = self.parse_json_body(request)
         if error is not None:
             return error
@@ -190,10 +236,10 @@ class LinkView(ValidationMixin, View):
                 status=400
             )
 
-        if duration > MAX_LINK_DURATION:
+        if duration > MAX_LINK_DURATION or duration < 1:
             return JsonResponse(
                 {'error': f"'duration' cannot be greater than "
-                 f"{MAX_LINK_DURATION} hours"}, status=400
+                 f"{MAX_LINK_DURATION} or less than 1 hour"}, status=400
             )
         
         link = get_object_or_404(Link, uuid=uuid)
@@ -204,6 +250,16 @@ class LinkView(ValidationMixin, View):
     
     # delete an existing link given its UUID
     def delete(self, request):
+        """
+        Delete an existing link based on the provided UUID.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object containing a UUID.
+
+        Returns:
+            - JsonResponse: JSON response indicating the success or failure of
+            the deletion operation
+        """
         body, error = self.parse_json_body(request)
         if error is not None:
             return error
