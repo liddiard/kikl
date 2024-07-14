@@ -5,8 +5,9 @@ from shortener import views
 
 urlpatterns = [
     path('', views.FrontPageView.as_view(), name='front'),
+    path('api/csrf/', views.set_csrf_token, name='csrf_token'),
     path('api/link/', views.LinkView.as_view(), name='link'),
     path('admin/', admin.site.urls),
-    path('<str:adjective>-<str:noun>/', views.target_view, 
-         name='target'),
+    path('<str:adjective>-<str:noun>/', views.target_view,
+         name='target')
 ]
