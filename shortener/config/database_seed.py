@@ -27,7 +27,15 @@ ADJECTIVES = [
     "tall",
     "short",
     "sad",
-    "happy"
+    "happy",
+    "excited",
+    "scared",
+    "silly",
+    "funny",
+    "wicked",
+    "adorable",
+    "shiny",
+    "shy"
 ]
 
 NOUNS = [
@@ -55,5 +63,13 @@ NOUNS = [
     "dog",
     "cat",
     "lemur",
-    "puffin"
+    "puffin",
+    "tiger",
+    "leopard",
+    "giraffe",
+    "wolf",
+    "rabbit",
+    "snail",
+    "bear",
+    "frog"
 ]
