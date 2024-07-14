@@ -121,3 +121,10 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+# https://docs.djangoproject.com/en/5.0/ref/settings/#csrf-trusted-origins
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://kikl.co',
+    'http://localhost:8000'
+]
