@@ -16,6 +16,6 @@ class ValidationMixin:
         # https://stackoverflow.com/a/33245493/2487925
         try:
             uuid_obj = UUID(val, version=4)
-        except ValueError:
+        except:
             return False
         return str(uuid_obj) == val
