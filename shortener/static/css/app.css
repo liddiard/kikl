@@ -1,0 +1,60 @@
+:root {
+  /* tailwind colors */
+  --slate-500: #64748b;
+  --slate-800: #1e293b;
+  --indigo-700: #4338ca;
+  --pink-500: #ec4899;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+}
+
+progress[value] {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+
+  &::-webkit-progress-bar {
+    border-radius: 1em;
+    background-color: transparent;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+  }
+
+  &::-webkit-progress-value {
+    border-radius: 1em;
+    background-color: var(--pink-500);
+  }
+}
+
+.Typewriter__cursor {
+  color: var(--slate-500);
+  font-weight: normal;
+}
+
+.logo-mask {
+  clip-path: circle(5px at 25px 8px);
+}
+
+.tooltip {
+  --caret-height: 6px;
+  top: calc(-100% - var(--caret-height));
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: calc(-1 * var(--caret-height));
+    border-width: var(--caret-height);
+    border-style: solid;
+    border-color: var(--slate-800) transparent transparent transparent;
+  }
+}

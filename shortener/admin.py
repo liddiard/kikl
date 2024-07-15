@@ -1,23 +1,10 @@
 from django.contrib import admin
 from shortener.models import Adjective, Noun, Link
 
-
-class AdjectiveAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(Adjective, AdjectiveAdmin)
-
-
-class NounAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(Noun, NounAdmin)
-
+admin.site.register(Adjective)
+admin.site.register(Noun)
 
 class LinkAdmin(admin.ModelAdmin):
-    pass
-
+    readonly_fields = ('uuid',)
 
 admin.site.register(Link, LinkAdmin)

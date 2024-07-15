@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from shortener.models import Link
 
 class Command(BaseCommand):
@@ -7,5 +7,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for link in Link.objects.filter(is_active=True):
-            link.deactivate_if_expired()
+            link.update_is_active()
         return 0

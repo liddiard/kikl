@@ -1,0 +1,20 @@
+name: kikl
+
+services:
+  django:
+    container_name: kikl_django
+    entrypoint: /app/entrypoint.sh
+    build: .
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    ports:
+      - "8001:8001"
+    networks:
+      - app_network
+    restart: unless-stopped
+
+networks:
+  app_network:
+    driver: bridge
