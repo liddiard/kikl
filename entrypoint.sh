@@ -17,4 +17,4 @@ python manage.py seed_words # add default adjectives and nouns to the database
 service cron start
 
 # Start Gunicorn server
-exec gunicorn kikl.wsgi:application --bind 0.0.0.0:8000
+exec gunicorn kikl.wsgi:application --bind 0.0.0.0:8001

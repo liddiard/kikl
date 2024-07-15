@@ -1,6 +1,6 @@
 services:
   django:
-    container_name: django
+    container_name: kikl_django
     entrypoint: /app/entrypoint.sh
     build: .
     volumes:
@@ -8,5 +8,5 @@ services:
     env_file:
       - .env
     ports:
-      - "8000:8000"
-    # restart: unless-stopped
+      - "8001:8001"
+    restart: unless-stopped

@@ -126,5 +126,5 @@ STORAGES = {
 
 CSRF_TRUSTED_ORIGINS = [
     'https://kikl.co',
-    'http://localhost:8000'
+    'http://localhost:8001'
 ]
