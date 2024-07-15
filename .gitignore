@@ -4,5 +4,6 @@
 *.map
 .DS_Store
 .env
+app.log
 shortener/migrations/
 static/

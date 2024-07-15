@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -119,6 +120,40 @@ STORAGES = {
     "staticfiles": {
         # https://whitenoise.readthedocs.io/en/stable/django.html#add-compression-and-caching-support
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {
+            "format": "{levelname} [{asctime}] {message}",
+            "style": "{",
+        },
+        "verbose": {
+            "format": "{levelname} [{asctime}] {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+            "formatter": "simple"
+        },
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "app.log"),
+            "formatter": "verbose"
+        },
+    },
+    "loggers": {
+        "": { # empty string is the default logger config
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": True
+        },
     },
 }
 
