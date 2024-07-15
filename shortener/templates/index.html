@@ -56,9 +56,9 @@
             <div v-if="apiError" v-cloak role="alert" class="text-red-700 mt-2 font-bold">{{ apiError }}</div>
         </form>
         <section id="your-links" class="my-4" v-cloak>
-            <h2 class="text-2xl font-bold">🔗 Your links</h2>
-            <ul id="links" class="my-4">
-                <li v-for="link in links" class="my-6">
+            <h2 v-if="links.length" class="text-2xl font-bold">🔗 Your links</h2>
+            <ul id="links" class="my-4 flex flex-col gap-8">
+                <li v-for="link in links">
                     <div class="text-lg flex gap-2">
                         <div class="relative group">
                             <link-styled :href="link.path" class="whitespace-nowrap inline-block group" @click.native.prevent="copyLink(link.path)"  @mouseout="handleLinkMouseout(link)">
@@ -74,10 +74,10 @@
                     <progress :value="getLinkHoursRemaining(link)" :max="link.duration" class="block w-full my-2 h-2"></progress>
                     <div class="flex justify-between items-center flex-col sm:flex-row gap-2">
                         <span class="italic">
-                            Expires   
+                            {{ getLinkHoursRemaining(link) > 0 ? 'Expires' : 'Expired' }}
                             <time>{{ getLinkExpiration(link) }}</time>
                         </span>
-                        <div class="flex items-center gap-2 font-bold">
+                        <div v-if="getLinkHoursRemaining(link) > 0" class="flex items-center gap-2 font-bold">
                             <button v-if="canIncreaseLinkDuration(link)" @click="addTime(link)" class="border-2 border-indigo-700 hover:bg-indigo-100 px-3 py-1 text-indigo-700 rounded-3xl">➕ 24 hours</button>
                             <span v-else class="text-amber-700">Link is at max time (7 days)</span>
                             <button @click="deleteLink(link)" class="border-2 border-indigo-700 hover:bg-indigo-100 px-3 py-1 text-indigo-700 rounded-3xl">🗑️ Delete</button>

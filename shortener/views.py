@@ -243,8 +243,14 @@ class LinkView(ValidationMixin, View):
                 {'error': f"'duration' cannot be greater than "
                  f"{MAX_LINK_DURATION} or less than 1 hour"}, status=400
             )
-        
+
         link = get_object_or_404(Link, uuid=uuid)
+        link.update_is_active()
+        if not link.is_active:
+            return JsonResponse(
+                {'error': "Link is has expired"}, status=400
+            )
+
         link.duration = timedelta(hours=duration)
         link.save()
         link.update_is_active()
