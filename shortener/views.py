@@ -100,7 +100,8 @@ class LinkView(ValidationMixin, View):
                     status=400
                 )
         
-        links = Link.objects.filter(uuid__in=uuids).order_by('-time_added')
+        links = Link.objects.filter(uuid__in=uuids, is_active=True)\
+            .order_by('-time_added')
         for link in links:
             link.update_is_active()
 
