@@ -37,7 +37,7 @@ def target_view(request, adjective, noun):
     a = get_object_or_404(Adjective, word=adjective)
     n = get_object_or_404(Noun, word=noun)
     link = get_object_or_404(Link, is_active=True, adjective=a, noun=n)
-    link.deactivate_if_expired()
+    link.update_is_active()
     if link.is_active:
         return redirect(link.target)
     else:
@@ -102,7 +102,7 @@ class LinkView(ValidationMixin, View):
         
         links = Link.objects.filter(uuid__in=uuids).order_by('-time_added')
         for link in links:
-            link.deactivate_if_expired()
+            link.update_is_active()
 
         links_json = [link.to_json() for link in links]
         return JsonResponse({'links': links_json}, status=200)
@@ -247,7 +247,7 @@ class LinkView(ValidationMixin, View):
         link = get_object_or_404(Link, uuid=uuid)
         link.duration = timedelta(hours=duration)
         link.save()
-        link.deactivate_if_expired()
+        link.update_is_active()
         return JsonResponse(link.to_json(), status=200)
     
     # delete an existing link given its UUID

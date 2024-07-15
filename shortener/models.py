@@ -50,10 +50,9 @@ class Link(models.Model):
     def path(self):
         return f"{self.adjective}-{self.noun}"
 
-    def deactivate_if_expired(self):
-        if self.time_added + self.duration < timezone.now():
-            self.is_active = False
-            self.save()
+    def update_is_active(self):
+        self.is_active = self.time_added + self.duration > timezone.now()
+        self.save()
 
     def secs_remaining(self):
         time_delta = (self.time_added + timedelta(hours=self.duration))\
