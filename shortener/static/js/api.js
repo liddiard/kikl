@@ -1,6 +1,8 @@
 // CSRF token populated by Django template
 const { CSRF_TOKEN } = window
 
+const MAX_ACTIVE_LINKS = 10
+
 /**
  * Retrieves and parses UUIDs from local storage, handling potential errors.
  *
@@ -9,7 +11,9 @@ const { CSRF_TOKEN } = window
 function getLinkUuids() {
   let uuids
   try {
-    uuids = JSON.parse(window.localStorage.getItem('links')) ?? []
+    // slice to ensure we don't exceed MAX_ACTIVE_LINKS (can happen if a link
+    // expired while the page was open)
+    uuids = (JSON.parse(window.localStorage.getItem('links')) ?? []).slice(0, MAX_ACTIVE_LINKS)
   } catch (e) {
     uuids = []
   }
