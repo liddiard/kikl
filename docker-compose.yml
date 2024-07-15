@@ -12,9 +12,9 @@ services:
     ports:
       - "8001:8001"
     networks:
-      - kikl_network
+      - app_network
     restart: unless-stopped
 
 networks:
-  kikl_network:
+  app_network:
     driver: bridge
