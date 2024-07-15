@@ -1,9 +1,0 @@
-Thanks for creating an account with kikl.co! Just follow the link below to activate your account.
-
-http://kikl.co/accounts/activate/{{ activation_key }}/
-
-
-If you didn't request this, you don't need to do anything; you won't receive any more email from us, and the account will expire automatically in {{ expiration_days }} days.
-
-Welcome!
-The kikl.co Team
