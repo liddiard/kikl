@@ -1,3 +1,5 @@
+name: kikl
+
 services:
   django:
     container_name: kikl_django
@@ -9,4 +11,10 @@ services:
       - .env
     ports:
       - "8001:8001"
+    networks:
+      - kikl_network
     restart: unless-stopped
+
+networks:
+  kikl_network:
+    driver: bridge
