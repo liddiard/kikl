@@ -25,9 +25,11 @@ class FrontPageView(TemplateView):
     
     template_name = "index.html"
 
-
-class AboutPageView(TemplateView):
-    pass
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # get absolute URI for Open Graph tags
+        context['page_uri'] = self.request.build_absolute_uri()
+        return context
 
 
 # redirect to link
