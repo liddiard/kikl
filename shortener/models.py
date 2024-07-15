@@ -51,8 +51,9 @@ class Link(models.Model):
         return f"{self.adjective}-{self.noun}"
 
     def update_is_active(self):
-        self.is_active = self.time_added + self.duration > timezone.now()
-        self.save()
+        is_active = self.time_added + self.duration > timezone.now()
+        if self.is_active != is_active:
+            self.save()
 
     def secs_remaining(self):
         time_delta = (self.time_added + timedelta(hours=self.duration))\
