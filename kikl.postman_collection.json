@@ -1,0 +1,191 @@
+{
+	"info": {
+		"_postman_id": "f36673e2-6d37-4f4a-86ac-ea732b803fca",
+		"name": "kikl",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9829268"
+	},
+	"item": [
+		{
+			"name": "Get CSRF token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{BASE_URL}}api/csrf/",
+					"host": [
+						"{{BASE_URL}}api"
+					],
+					"path": [
+						"csrf",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create link",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"target\": \"https://example.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}api/link/",
+					"host": [
+						"{{BASE_URL}}api"
+					],
+					"path": [
+						"link",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get links",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}api/link/?uuids=f54a2287-a0a5-4305-9df3-7ab8dad8adb5,eec2be79-2c0c-4edb-a069-b241e6ab4592",
+					"host": [
+						"{{BASE_URL}}api"
+					],
+					"path": [
+						"link",
+						""
+					],
+					"query": [
+						{
+							"key": "uuids",
+							"value": "f54a2287-a0a5-4305-9df3-7ab8dad8adb5,eec2be79-2c0c-4edb-a069-b241e6ab4592"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update link duration",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uuid\": \"1b801ec0-30f1-49b5-bc65-0bbf121cb35b\",\n    \"duration\": 48\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}api/link/",
+					"host": [
+						"{{BASE_URL}}api"
+					],
+					"path": [
+						"link",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete link",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uuid\": \"1b801ec0-30f1-49b5-bc65-0bbf121cb35b\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}api/link/",
+					"host": [
+						"{{BASE_URL}}api"
+					],
+					"path": [
+						"link",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"// Get the csrftoken cookie",
+					"const jar = pm.cookies.jar();",
+					"jar.get('localhost', 'csrftoken', (err, cookie) => {",
+					"    pm.request.headers.upsert({",
+					"        key: 'X-CSRFToken',",
+					"        value: cookie",
+					"    });",
+					"})"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8001/"
+		},
+		{
+			"key": "CSRF_TOKEN",
+			"value": "asdf",
+			"disabled": true
+		}
+	]
+}
