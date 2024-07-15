@@ -1,0 +1,98 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>kikl.co: Tiny, short-lived, memorable links</title>
+    <meta name="description" content="The link shortener for easy to type and remember URLs.">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ page_uri }}" />
+    <meta property="og:image" content="{{request.scheme}}://{{request.META.HTTP_HOST}}{% static 'img/og_image.png' %}" />
+
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- font import -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+    <script>
+        window.CSRF_TOKEN = "{{ csrf_token }}"
+    </script>
+    <script type="importmap">
+        {
+            "imports": {
+                "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+            }
+        }
+    </script>
+</head>
+<body class="bg-indigo-700">
+    {% verbatim %}
+    <div id="app" class="container mx-auto max-w-2xl bg-white px-6 py-3 my-6 shadow-2xl rounded-2xl">
+        <header class="mt-4 mb-4 flex flex-row justify-start items-baseline gap-2">
+            <div class="relative">
+                <h1 class="text-4xl font-extrabold text-indigo-700">kikl<span class="text-pink-500">.</span>co</h1>
+                <h1 class="logo-mask absolute top-0 left-0 text-4xl font-extrabold text-pink-500">ki</h1>
+            </div>
+            <p class="text-2xl">Tiny, short-lived, memorable links</p>
+        </header>
+        <div id="explainer">
+            <h2 class="text-4xl sm:text-5xl mt-8 mb-8">Who could forget <br /><span id="link-example" class="text-nowrap text-indigo-700 font-black"></span>?</h2>
+            <p class="mt-2 mb-2 text-lg"><strong>kikl.co</strong> is a different kind of link shortener. Instead of making URLs as <strong>short</strong> as possible, it makes them as <strong>memorable</strong> as possible.</p>
+            <p class="mt-2 mb-2 text-lg">By default, each link only lasts <strong>24 hours</strong>, perfect for quickly transferring a long URL from one device to another 💻📲 or telling people verbally. 😮💬</p>
+        </div>
+        <form @submit.prevent="handleSubmit" class="my-8">
+            <label for="target" class="text-lg font-bold block mb-2">Enter a URL to shorten:</label>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <input type="url" required v-model="target" name="target" id="target" placeholder="https://example.com" autofocus class="flex-grow text-2xl w-full rounded-2xl border border-gray-300 p-4" />
+                <button class="text-xl font-bold p-4 rounded-2xl bg-indigo-700 hover:bg-indigo-600 text-white">Shorten!</button>
+            </div>
+            <div v-if="apiError" v-cloak role="alert" class="text-red-700 mt-2 font-bold">{{ apiError }}</div>
+        </form>
+        <section id="your-links" class="my-4" v-cloak>
+            <h2 class="text-2xl font-bold">🔗 Your links</h2>
+            <ul id="links" class="my-4">
+                <li v-for="link in links" class="my-6">
+                    <div class="text-lg flex gap-2">
+                        <div class="relative group">
+                            <link-styled :href="link.path" class="whitespace-nowrap inline-block group" @click.native.prevent="copyLink(link.path)"  @mouseout="handleLinkMouseout(link)">
+                                {{ host }}/<strong class="text-indigo-700">{{ link.path }}</strong> 
+                            </link-styled>
+                            <div class="tooltip absolute w-max left-1/2 transform -translate-x-1/2 bg-slate-800 text-white text-base px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                {{ linkCopied ? '✅ Copied' : '📋 Click to copy' }}
+                            </div>
+                        </div>
+                        →
+                        <link-styled :href="link.target" class="line-clamp-1 break-all">{{ link.target }}</link-styled>
+                    </div>
+                    <progress :value="getLinkHoursRemaining(link)" :max="link.duration" class="block w-full my-2 h-2"></progress>
+                    <div class="flex justify-between items-center flex-col sm:flex-row gap-2">
+                        <span class="italic">
+                            Expires   
+                            <time>{{ getLinkExpiration(link) }}</time>
+                        </span>
+                        <div class="flex items-center gap-2 font-bold">
+                            <button v-if="canIncreaseLinkDuration(link)" @click="addTime(link)" class="border-2 border-indigo-700 hover:bg-indigo-100 px-3 py-1 text-indigo-700 rounded-3xl">➕ 24 hours</button>
+                            <span v-else class="text-amber-700">Link is at max time (7 days)</span>
+                            <button @click="deleteLink(link)" class="border-2 border-indigo-700 hover:bg-indigo-100 px-3 py-1 text-indigo-700 rounded-3xl">🗑️ Delete</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </section>
+        <footer class="text-center mt-10 mb-4">
+            Created by <link-styled href="https://harrisonliddiard.com/">Harrison Liddiard</link-styled>
+        </footer>
+
+    </div>
+    {% endverbatim %}
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    <script type="module" src="{% static 'js/app.js' %}"></script>
+</body>
+</html>
