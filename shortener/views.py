@@ -169,7 +169,7 @@ class LinkView(ValidationMixin, View):
         adjective = Adjective.objects.order_by('?')[0]
         # Get a random noun that is not already in use in combination with the
         # chosen adjective
-        noun_query = f'''
+        noun_query = '''
             SELECT * 
             FROM shortener_noun n 
             WHERE NOT EXISTS (
