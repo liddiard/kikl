@@ -24,7 +24,7 @@
     <form @submit.prevent="handleSubmit" class="my-8">
         <label for="target" class="text-lg font-bold block mb-2">Enter a URL to shorten:</label>
         <div class="flex flex-col sm:flex-row gap-4">
-            <input type="url" required v-model="target" name="target" id="target" placeholder="https://example.com" autofocus class="flex-grow text-2xl w-full rounded-2xl border border-gray-300 p-4" />
+            <input type="url" required v-model="target" name="target" id="target" placeholder="https://example.com" autofocus class="flex-grow text-2xl w-full rounded-2xl border border-slate-400 p-4" />
             <button class="text-xl font-bold p-4 rounded-2xl bg-indigo-700 hover:bg-indigo-600 text-white">Shorten!</button>
         </div>
         <div v-if="apiError" v-cloak role="alert" class="text-red-700 mt-2 font-bold">{{ apiError }}</div>
