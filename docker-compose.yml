@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
     ports:
-      - "8001:8001"
+      - "${PORT}:${PORT}"
     networks:
       - app_network
     restart: unless-stopped

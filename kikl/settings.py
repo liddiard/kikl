@@ -162,5 +162,5 @@ LOGGING = {
 
 CSRF_TRUSTED_ORIGINS = [
     'https://kikl.co',
-    'http://localhost:8001'
+    f'http://localhost:{os.getenv("PORT")}'
 ]
