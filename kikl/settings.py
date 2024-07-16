@@ -34,7 +34,8 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
-    'kikl.co'
+    'kikl.co',
+    'www.kikl.co'
 ]
 
 
