@@ -49,8 +49,11 @@ class Link(models.Model):
         return f"{self.adjective}-{self.noun}"
 
     def update_is_active(self):
+        # determine whether the link should be active
         is_active = self.time_added + self.duration > timezone.now()
+        # if it differs from the current state, update it
         if self.is_active != is_active:
+            self.is_active = is_active
             self.save()
 
     def secs_remaining(self):
