@@ -8,8 +8,8 @@ python manage.py migrate
 python manage.py createsuperuser --no-input
 python manage.py seed_words # add default adjectives and nouns to the database
 
-# Start the cron service
-supercron /app/shortener/config/cron-jobs
+# Start supercronic
+supercronic /app/shortener/config/cron-jobs
 
 # Start Gunicorn server
 exec gunicorn kikl.wsgi:application --bind 0.0.0.0:$PORT
