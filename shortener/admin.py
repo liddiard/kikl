@@ -7,7 +7,7 @@ admin.site.register(Noun)
 class LinkAdmin(admin.ModelAdmin):
     list_display = ('path', 'target_truncated', 'time_added', 'is_active')
     list_filter = ('is_active',)
-    ordering = ('-is_active',)
+    ordering = ('-time_added',)
     readonly_fields = ('uuid', 'time_added')
 
     def target_truncated(self, obj):
