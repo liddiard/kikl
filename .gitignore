@@ -4,6 +4,7 @@
 *.map
 .DS_Store
 .env
+db.sqlite3
 app.log
 shortener/migrations/
 static/
