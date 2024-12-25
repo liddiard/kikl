@@ -1,4 +1,4 @@
-Django==5.1.5
+Django==5.1.4
 python-dotenv==1.0.1
 django-ipware==7.0.1
 whitenoise==6.8.2
