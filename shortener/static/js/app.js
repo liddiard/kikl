@@ -25,6 +25,9 @@ const LinkStyled = {
 createApp({
   async created() {
     this.links = await getLinks()
+    // prevent input from getting defocused when links are rendered (not sure
+    // why this happens)
+    this.$refs.targetInput.focus()
   },
 
   data() {
